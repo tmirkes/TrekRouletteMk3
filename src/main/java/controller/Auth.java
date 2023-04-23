@@ -90,6 +90,7 @@ public class Auth extends HttpServlet implements PropertiesLoader {
                 TokenResponse tokenResponse = getToken(authRequest);
                 userName = validate(tokenResponse);
                 req.setAttribute("userName", userName);
+                req.setAttribute("error", "none");
             } catch (IOException e) {
                 logger.error("Error getting or validating the token: " + e.getMessage(), e);
                 req.setAttribute("error", "IOException");
