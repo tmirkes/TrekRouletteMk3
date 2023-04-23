@@ -21,9 +21,29 @@
     <jstl-version>1.2</jstl-version>
     <taglibs-version>1.1.2</taglibs-version>
     <mysql-version>8.0.32</mysql-version>
+    <comauth-version>3.4.1</comauth-version>
+    <orgjson-version>20170516</orgjson-version>
+    <commonsio-version>2.11.0</commonsio-version>
   </properties>
   <!-- Individual dependencies -->
   <dependencies>
+    <!-- JSON web token -->
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>${comauth-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>${orgjson-version}</version>
+    </dependency>
+    <!-- Apache Commons IO -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commonsio-version}</version>
+    </dependency>
     <!-- MySQL Java Connector -->
     <dependency>
       <groupId>com.mysql</groupId>
