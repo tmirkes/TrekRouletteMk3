@@ -10,7 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import auth.*;
-import util.PropertiesLoader;
+import utility.PropertiesLoader;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
