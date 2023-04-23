@@ -39,3 +39,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/src/main/.platform/httpd/conf.d/ssl.conf
+/src/main/.ebextensions/https-instance.config
+/src/main/.ebextensions.https-instance-single.config

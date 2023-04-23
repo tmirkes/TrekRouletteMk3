@@ -11,12 +11,12 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
- * trekDao provides a universal set of methods for accessing and modifying persistence objects via Hibernate.  Basic
+ * TrekDao provides a universal set of methods for accessing and modifying persistence objects via Hibernate.  Basic
  * methods are outlined to satisfy create, retrieve, update, and delete functions.
  *
  * @param <T> class of object to be processed
  */
-public class trekDao<T> {
+public class TrekDao<T> {
     private Class<T> type;
     private final Logger logger = LogManager.getLogger(this.getClass());
 
@@ -24,7 +24,7 @@ public class trekDao<T> {
      * Parameterized constructor
      * @param type class of object
      */
-    public trekDao(Class<T> type) {
+    public TrekDao(Class<T> type) {
         this.type = type;
     }
     /**

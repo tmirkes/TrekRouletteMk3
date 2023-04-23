@@ -2,7 +2,7 @@ package controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import util.PropertiesLoader;
+import utility.PropertiesLoader;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -5,7 +5,7 @@
 <body>
 <%@ include file="header.jsp"%>
 <%@ include file="navigation.jsp"%>
-member = ${error}
-<%@ include file="footer.jsp"%>
+<h1>Something went wrong...</h1>
+error = <%@ include file="footer.jsp"%>
 </body>
 </html>

@@ -81,7 +81,9 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         String userName = null;
 
         if (authCode == null) {
-            //TODO forward to an error page or back to the login
+            req.setAttribute("error", "Authorization failed. Please try again.");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/error.jsp");
+            dispatcher.forward(req, resp);
         } else {
             HttpRequest authRequest = buildAuthRequest(authCode);
             try {
@@ -90,15 +92,18 @@ public class Auth extends HttpServlet implements PropertiesLoader {
                 req.setAttribute("userName", userName);
             } catch (IOException e) {
                 logger.error("Error getting or validating the token: " + e.getMessage(), e);
-                //TODO forward to an error page
+                req.setAttribute("error", "IOException");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/error.jsp");
+                dispatcher.forward(req, resp);
             } catch (InterruptedException e) {
                 logger.error("Error getting token from Cognito oauth url " + e.getMessage(), e);
-                //TODO forward to an error page
+                req.setAttribute("error", "InterruptedException");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/error.jsp");
+                dispatcher.forward(req, resp);
             }
         }
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/member.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/loadUser");
         dispatcher.forward(req, resp);
-
     }
 
     /**
