@@ -27,10 +27,52 @@
     <stapi-version>0.1.2</stapi-version>
     <javax-version>7.0</javax-version>
     <jersey-version>2.29.1</jersey-version>
-
+    <jackson-version>2.10.0</jackson-version>
+    <jakarta-xml-bind-version>2.3.2</jakarta-xml-bind-version>
+    <jakarta-servlet-api-version>6.0.0</jakarta-servlet-api-version>
   </properties>
   <!-- Individual dependencies -->
   <dependencies>
+    <!-- Javax XML Bind update -->
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jakarta-xml-bind-version}</version>
+    </dependency>
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>${jakarta-xml-bind-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>${jakarta-servlet-api-version}</version>
+        <scope>provided</scope>
+      </dependency>
+    <!-- Jackson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-version}</version>
+    </dependency>
+    <!-- Testng -->
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
     <!-- Jersey -->
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
