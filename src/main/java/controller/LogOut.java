@@ -24,7 +24,7 @@ public class LogOut extends HttpServlet implements PropertiesLoader {
     private final Logger logger = LogManager.getLogger(this.getClass());
     private String logOutRedirect;
     public static String CLIENT_ID;
-    public static String LOGOUT_URL;
+    public static String LOGOUT_ENDPOINT;
 
     @Override
     public void init() throws ServletException {
@@ -42,8 +42,8 @@ public class LogOut extends HttpServlet implements PropertiesLoader {
         try {
             properties = loadProperties("/cognito.properties");
             CLIENT_ID = properties.getProperty("client.id");
-            LOGOUT_URL = properties.getProperty("logoutURL");
-            logOutRedirect = properties.getProperty("logOutRedirectURL");
+            LOGOUT_ENDPOINT = properties.getProperty("logoutURL");
+            logOutRedirect = properties.getProperty("logoutRedirectURL");
         } catch (IOException ioException) {
             logger.error("Cannot load properties..." + ioException.getMessage(), ioException);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class LogOut extends HttpServlet implements PropertiesLoader {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // TODO if properties weren't loaded properly, route to an error page
-        String url = LOGOUT_URL + "?response_type=code&client_id=" + CLIENT_ID + "&redirect_uri=" + logOutRedirect;
+        String url = LOGOUT_ENDPOINT + "?client_id=" + CLIENT_ID + "&logout_uri=" + logOutRedirect;
         resp.sendRedirect(url);
     }
 }
