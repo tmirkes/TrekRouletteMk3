@@ -26,7 +26,12 @@ public class EpisodeSelect extends HttpServlet {
         StapiParse parser = new StapiParse(episode);
         EpisodeFullResponse selection = parser.recommendEpisode();
         session.setAttribute("selection", selection);
-        String url = "/roulette.jsp";
+        String url = "";
+        if (session.getAttribute("currentUser") == null || session.getAttribute("currentUser").equals("")) {
+            url = "/public.jsp";
+        } else {
+            url = "/member.jsp";
+        }
         //response.sendRedirect(request.getContextPath() + url);
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);
