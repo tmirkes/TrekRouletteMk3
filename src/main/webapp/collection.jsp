@@ -6,6 +6,7 @@
 <%@ include file="header.jsp"%>
 <%@ include file="navigation.jsp"%>
 <form>
+    <input hidden name="userId" id="userId" value="${currentUser.id}">
     <fieldset>
         <legend>The Original Series</legend>
         <input type="checkbox" id="tos1" name="tos1" value="SAMA...">

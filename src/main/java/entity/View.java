@@ -96,6 +96,20 @@ public class View {
         return Objects.hash(id, viewDate, userId, episodeId, statusId);
     }
 
+    @Override
+    public String toString() {
+        return "View{" +
+                "id=" + id +
+                ", viewDate=" + viewDate +
+                ", userId=" + userId +
+                ", episodeId=" + episodeId +
+                ", statusId=" + statusId +
+                ", userByUserId=" + userByUserId +
+                ", episodeByEpisodeId=" + episodeByEpisodeId +
+                ", statusByStatusId=" + statusByStatusId +
+                '}';
+    }
+
     public User getUserByUserId() {
         return userByUserId;
     }

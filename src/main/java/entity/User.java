@@ -84,12 +84,25 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(lastLogin, user.lastLogin);
+        return getId() == user.getId() && getUserName().equals(user.getUserName()) && getFirstName().equals(user.getFirstName()) && getLastName().equals(user.getLastName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, firstName, lastName, lastLogin);
+        return Objects.hash(getId(), getUserName(), getFirstName(), getLastName());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", lastLogin=" + lastLogin +
+                ", ownsById=" + ownsById +
+                ", viewsById=" + viewsById +
+                '}';
     }
 
     public List<Own> getOwnsById() {

@@ -79,6 +79,18 @@ public class Season {
         return Objects.hash(id, series, season, stapiSeasonId);
     }
 
+    @Override
+    public String toString() {
+        return "Season{" +
+                "id=" + id +
+                ", series='" + series + '\'' +
+                ", season=" + season +
+                ", stapiSeasonId='" + stapiSeasonId + '\'' +
+                ", episodesById=" + episodesById +
+                ", ownsById=" + ownsById +
+                '}';
+    }
+
     public List<Episode> getEpisodesById() {
         return episodesById;
     }

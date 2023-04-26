@@ -22,6 +22,8 @@ public class EpisodeSelect extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+
+
         Episode episode = (Episode)session.getAttribute("Episodes");
         StapiParse parser = new StapiParse(episode);
         EpisodeFullResponse selection = parser.recommendEpisode();

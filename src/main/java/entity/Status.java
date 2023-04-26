@@ -46,6 +46,15 @@ public class Status {
         return Objects.hash(id, statusTitle);
     }
 
+    @Override
+    public String toString() {
+        return "Status{" +
+                "id=" + id +
+                ", statusTitle='" + statusTitle + '\'' +
+                ", viewsById=" + viewsById +
+                '}';
+    }
+
     public List<View> getViewsById() {
         return viewsById;
     }

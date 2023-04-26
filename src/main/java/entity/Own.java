@@ -68,6 +68,17 @@ public class Own {
         return Objects.hash(id, userId, seasonId);
     }
 
+    @Override
+    public String toString() {
+        return "Own{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", seasonId=" + seasonId +
+                ", userByUserId=" + userByUserId +
+                ", seasonBySeasonId=" + seasonBySeasonId +
+                '}';
+    }
+
     public User getUserByUserId() {
         return userByUserId;
     }

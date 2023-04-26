@@ -80,6 +80,18 @@ public class Episode {
         return Objects.hash(id, title, stapiEpisodeId, seasonId);
     }
 
+    @Override
+    public String toString() {
+        return "Episode{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", stapiEpisodeId='" + stapiEpisodeId + '\'' +
+                ", seasonId=" + seasonId +
+                ", seasonBySeasonId=" + seasonBySeasonId +
+                ", viewsById=" + viewsById +
+                '}';
+    }
+
     public Season getSeasonBySeasonId() {
         return seasonBySeasonId;
     }
