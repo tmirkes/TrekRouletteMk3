@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "ApiDataLoader", urlPatterns = "/loadData")
+@WebServlet(name = "ApiDataLoader", urlPatterns = "/loadDataX")
 public class ApiDataLoader extends HttpServlet {
     private StapiRestClient stapiRestClient;
     private final Logger logger = LogManager.getLogger(this.getClass());
@@ -25,7 +25,7 @@ public class ApiDataLoader extends HttpServlet {
         stapiRestClient = new StapiRestClient();
         Episode episode = stapiRestClient.getEpisode();
         session.setAttribute("Episodes", episode);
-        String url = "/selector";
+        String url = "/public.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);
     }

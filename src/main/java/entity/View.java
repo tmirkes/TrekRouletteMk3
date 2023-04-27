@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity(name="View")
-@Table(name="view", schema="trekroulette")
+@Table(name="view")
 public class View {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

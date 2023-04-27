@@ -7,6 +7,10 @@
     <%@ include file="navigation.jsp"%>
     <%@ include file="episode.jsp"%>
     index = ${error}
+
+    ${episodeList}
+
+    ${randomList}
     <%@ include file="footer.jsp"%>
 </body>
 </html>

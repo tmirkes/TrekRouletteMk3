@@ -50,7 +50,6 @@ public class StapiParse {
                 pageCounter++;
             }
             // Extract existing seasons
-            buildSeasonList(baseResponse);
             logger.info("after all pages: " + episodeList.size());
             // Step 4: extract the index randomly selected
             index = selectResultIndex(episodeCount);
@@ -72,16 +71,4 @@ public class StapiParse {
         return (int) ThreadLocalRandom.current().nextInt(0, episodeCount + 1);
     }
 
-    public void buildSeasonList(EpisodeBaseResponse baseResponse) {
-        Episode episode;
-        int cycle = 0;
-        while (cycle < baseResponse.getEpisodes().size()) {
-            String series = baseResponse.getEpisodes().get(cycle).getSeries().getTitle();
-            int season = baseResponse.getEpisodes().get(cycle).getSeasonNumber();
-            String uid = baseResponse.getEpisodes().get(cycle).getSeason().getUid();
-            episode = new Episode(series, season, uid);
-            currentSeasons.put(baseResponse.getEpisodes().get(cycle).getSeason().getTitle(), episode);
-            cycle++;
-        }
-    }
 }

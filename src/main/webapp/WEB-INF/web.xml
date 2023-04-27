@@ -11,23 +11,15 @@
   <!--  Servlet and JSP Configurations **************************************  -->
   <!--  *********************************************************************  -->
     <servlet>
-        <servlet-name>ApiDataLoader</servlet-name>
-        <servlet-class>controller.ApiDataLoader</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>EpisodeSelect</servlet-name>
-        <servlet-name>controller.EpisodeSelect</servlet-name>
+        <servlet-class>controller.EpisodeSelect</servlet-class>
     </servlet>
   <!--  *********************************************************************  -->
   <!--  Servlet Mappings ****************************************************  -->
   <!--  *********************************************************************  -->
     <servlet-mapping>
-        <servlet-name>ApiDataLoader</servlet-name>
-        <url-pattern>/loadData</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>EpisodeSelect</servlet-name>
-        <url-pattern>/selector</url-pattern>
+        <url-pattern>/getEpisode</url-pattern>
     </servlet-mapping>
   <!--  *********************************************************************  -->
   <!--  Home Page ***********************************************************  -->

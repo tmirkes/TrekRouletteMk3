@@ -4,9 +4,10 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name="User")
-@Table(name="user", schema="trekroulette")
+@Table(name="user")
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -24,10 +25,10 @@ public class User {
     @Basic
     @Column(name = "last_login", nullable = true)
     private Timestamp lastLogin;
-    @OneToMany(mappedBy = "userByUserId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Own> ownsById;
-    @OneToMany(mappedBy = "userByUserId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<View> viewsById;
+    @OneToMany(mappedBy = "userByUserId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Own> ownsById;
+    @OneToMany(mappedBy = "userByUserId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<View> viewsById;
 
     public User() {
     }
@@ -105,19 +106,19 @@ public class User {
                 '}';
     }
 
-    public List<Own> getOwnsById() {
+    public Set<Own> getOwnsById() {
         return ownsById;
     }
 
-    public void setOwnsById(List<Own> ownsById) {
+    public void setOwnsById(Set<Own> ownsById) {
         this.ownsById = ownsById;
     }
 
-    public List<View> getViewsById() {
+    public Set<View> getViewsById() {
         return viewsById;
     }
 
-    public void setViewsById(List<View> viewsById) {
+    public void setViewsById(Set<View> viewsById) {
         this.viewsById = viewsById;
     }
 }

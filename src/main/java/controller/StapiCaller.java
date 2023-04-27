@@ -26,7 +26,8 @@ public class StapiCaller extends HttpServlet {
         HttpSession session = request.getSession();
         stapiRestClient = new StapiRestClient();
         Episode episode = stapiRestClient.getEpisode();
-        session.setAttribute("Episodes", episode);
+
+        //session.setAttribute("Episodes", episode);
 
         String url = "/selector";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);

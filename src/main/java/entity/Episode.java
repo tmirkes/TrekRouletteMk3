@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name="Episode")
-@Table(name="episode", schema="trekroulette")
+@Table(name="episode")
 public class Episode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

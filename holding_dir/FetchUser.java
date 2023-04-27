@@ -3,10 +3,8 @@ package persistence;
 import entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,10 +20,9 @@ public class FetchUser {
         logger.info("Oosers: " + getUsers.toString());
         User currentUser;
         if (getUsers.isEmpty()) {
-            int newId = 0;
             logger.info("No results found, creating new user.");
             currentUser = new User(userName, firstName, lastName, Timestamp.from(Instant.now()));
-            newId = userDao.addEntity(currentUser);
+            int newId = userDao.addEntity(currentUser);
         } else {
             logger.info("User found: " + getUsers.get(0).getUserName());
             currentUser = (User)getUsers.get(0);
