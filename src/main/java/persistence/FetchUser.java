@@ -17,7 +17,7 @@ public class FetchUser {
         String firstName = tokenData.get("firstname");
         String lastName = tokenData.get("lastname");
         List<User> getUsers = userDao.getByPropertyEqual("userName", userName);
-        logger.info("Oosers: " + getUsers.toString());
+        logger.info("users: " + getUsers.toString());
         User currentUser;
         if (getUsers.isEmpty()) {
             logger.info("No results found, creating new user.");

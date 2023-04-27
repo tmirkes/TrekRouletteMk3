@@ -5,6 +5,9 @@
 <body>
 <%@ include file="header.jsp"%>
 <%@ include file="navigation.jsp"%>
+owned = ${owned.size()}<br>
+unowned = ${unowned.size()}<br>
+
 <form>
     <input hidden name="userId" id="userId" value="${currentUser.id}">
     <fieldset>

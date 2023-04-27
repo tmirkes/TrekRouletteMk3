@@ -5,6 +5,7 @@
 <body>
 <%@ include file="header.jsp"%>
 <%@ include file="navigation.jsp"%>
+<%@ include file="episode.jsp"%>
 <p>member = ${error}</p>
 <p>welcome back, ${currentUser.userName}(${currentUser.id})!</p>
 <%@ include file="footer.jsp"%>

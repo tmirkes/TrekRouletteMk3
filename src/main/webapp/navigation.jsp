@@ -9,7 +9,7 @@
 <a href="about.jsp"><button>About</button></a>
 <a href="getEpisode"><button>New Recommendation</button></a>
 <c:if test="${currentUser != null}">
-    <a href="collection.jsp"><button>Collection</button></a>
+    <a href="manageOwn"><button>Collection</button></a>
 </c:if>
 <c:choose>
     <c:when test="${currentUser == null}">
