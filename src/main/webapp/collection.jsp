@@ -1,4 +1,6 @@
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!doctype html>
 <html lang="en">
 <%@ include file="head.jsp"%>
@@ -7,7 +9,36 @@
 <%@ include file="navigation.jsp"%>
 owned = ${owned.size()}<br>
 unowned = ${unowned.size()}<br>
-
+    <div style="display: inline-block; width: 50%;">
+        <form>
+            <legend>Seasons you own</legend>
+            <input hidden name="function" id="function" value="remove">
+            <input hidden name="userId" id="userId" value="${currentUser.id}">
+            <c:forEach var="own" items="${owned}" varStatus="status">
+                <c:set var="series" value="${0 + (3 * status.index)}"></c:set>
+                <c:set var="season" value="${1 + (3 * status.index)}"></c:set>
+                <c:set var="id" value="${2 + (3 * status.index)}"></c:set>
+                <input type="checkbox" name="<c:out value="${own.get(series)}"></c:out>" id="<c:out value="${own.get(series)}"></c:out><c:out value="${own.get(season)}"></c:out>" value="<c:out value="${own.get(id)}"></c:out>}">
+                <label for="<c:out value="${own.get(series)}"></c:out><c:out value="${own.get(season)}"></c:out>"><c:out value="${own.get(series)}"></c:out> Season <c:out value="${own.get(season)}"></c:out></label><br>
+            </c:forEach>
+        </form>
+        doop doop
+    </div>
+    <div style="display: inline-block; width: 50%;">
+        <form action="/manageOwn" method="POST">
+            <legend>Seasons you do not own</legend>
+            <input hidden name="function" id="function" value="add">
+            <input hidden name="userId" id="userId" value="${currentUser.id}">
+            <c:forEach var="unown" items="${unowned}" varStatus="status">
+                <c:set var="series" value="${0 + (3 * status.index)}"></c:set>
+                <c:set var="season" value="${1 + (3 * status.index)}"></c:set>
+                <c:set var="id" value="${2 + (3 * status.index)}"></c:set>
+                <input type="checkbox" name="<c:out value="${unown.get(series)}"></c:out>" id="<c:out value="${unown.get(series)}"></c:out><c:out value="${unown.get(season)}"></c:out>" value="<c:out value="${unown.get(id)}"></c:out>}">
+                <label for="<c:out value="${unown.get(series)}"></c:out><c:out value="${unown.get(season)}"></c:out>"><c:out value="${unown.get(series)}"></c:out> Season <c:out value="${unown.get(season)}"></c:out></label><br>
+            </c:forEach>
+        </form>
+        doop doop
+    </div>
 <form>
     <input hidden name="userId" id="userId" value="${currentUser.id}">
     <fieldset>

@@ -36,8 +36,8 @@ public class OwnershipManager extends HttpServlet {
         String queryUnowned = properties.getProperty("unownedquery");
         logger.info("query B = " + queryUnowned);
 
-        TreeSet<String> ownedResults = executeDatabaseSelectStatement(queryOwned, currentUser.getId());
-        TreeSet<String> unownedResults = executeDatabaseSelectStatement(queryUnowned, currentUser.getId());
+        ArrayList<ArrayList<String>> ownedResults = executeDatabaseSelectStatement(queryOwned, currentUser.getId());
+        ArrayList<ArrayList<String>> unownedResults = executeDatabaseSelectStatement(queryUnowned, currentUser.getId());
         session.setAttribute("owned", ownedResults);
         session.setAttribute("unowned", unownedResults);
 
@@ -52,8 +52,9 @@ public class OwnershipManager extends HttpServlet {
         doGet(request, response);
     }
 
-    public TreeSet<String> executeDatabaseSelectStatement(String query, int id) {
-        TreeSet<String> queryResult = new TreeSet<>();
+    public ArrayList<ArrayList<String>> executeDatabaseSelectStatement(String query, int id) {
+        ArrayList<ArrayList<String>> queryResult = new ArrayList<>();
+        ArrayList<String> resultArray = new ArrayList<>();
         String dbUrl = properties.getProperty("url");
         try {
             Class.forName(properties.getProperty("driver"));
@@ -64,10 +65,12 @@ public class OwnershipManager extends HttpServlet {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
             ResultSet results = stmt.executeQuery();
-            //results.beforeFirst();
             while (results.next()) {
                 logger.info("result record: " + results.getString("stapi_season_id"));
-                queryResult.add(results.getString("stapi_season_id"));
+                resultArray.add(results.getString("series").substring(11));
+                resultArray.add(results.getString("season"));
+                resultArray.add(results.getString("id"));
+                queryResult.add(resultArray);
             }
         } catch (SQLException sqlException) {
             logger.error("Database access error: " + sqlException.getMessage(), sqlException);
