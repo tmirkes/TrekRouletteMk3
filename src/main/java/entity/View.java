@@ -104,9 +104,6 @@ public class View {
                 ", userId=" + userId +
                 ", episodeId=" + episodeId +
                 ", statusId=" + statusId +
-                ", userByUserId=" + userByUserId +
-                ", episodeByEpisodeId=" + episodeByEpisodeId +
-                ", statusByStatusId=" + statusByStatusId +
                 '}';
     }
 

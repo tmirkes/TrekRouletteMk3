@@ -101,8 +101,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", lastLogin=" + lastLogin +
-                ", ownsById=" + ownsById +
-                ", viewsById=" + viewsById +
                 '}';
     }
 

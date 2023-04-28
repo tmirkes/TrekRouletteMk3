@@ -74,8 +74,6 @@ public class Own {
                 "id=" + id +
                 ", userId=" + userId +
                 ", seasonId=" + seasonId +
-                ", userByUserId=" + userByUserId +
-                ", seasonBySeasonId=" + seasonBySeasonId +
                 '}';
     }
 

@@ -51,7 +51,6 @@ public class Status {
         return "Status{" +
                 "id=" + id +
                 ", statusTitle='" + statusTitle + '\'' +
-                ", viewsById=" + viewsById +
                 '}';
     }
 

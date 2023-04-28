@@ -87,8 +87,6 @@ public class Episode {
                 ", title='" + title + '\'' +
                 ", stapiEpisodeId='" + stapiEpisodeId + '\'' +
                 ", seasonId=" + seasonId +
-                ", seasonBySeasonId=" + seasonBySeasonId +
-                ", viewsById=" + viewsById +
                 '}';
     }
 

@@ -86,8 +86,6 @@ public class Season {
                 ", series='" + series + '\'' +
                 ", season=" + season +
                 ", stapiSeasonId='" + stapiSeasonId + '\'' +
-                ", episodesById=" + episodesById +
-                ", ownsById=" + ownsById +
                 '}';
     }
 
