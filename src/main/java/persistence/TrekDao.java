@@ -72,6 +72,28 @@ public class TrekDao<T> {
         return list;
     }
     /**
+     * Retrieve database objects by specified attributes and values by exact match, multiple
+     *
+     * @param property1 first object property to search
+     * @param value1 first value to search for match
+     * @param property2 second object property to search
+     * @param value2 second value to search for match
+     * @return list of objects of type T matching search value
+     */
+    public List<T> getByMultiplePropertyEqual(String property1, String value1, String property2, String value2) {
+        Session session = getSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> query = builder.createQuery(type);
+        Root<T> root = query.from(type);
+        //query.select(root).where(builder.equal(root.get(property), value));
+        query.select(root).where(builder.and(builder.equal(root.get(property1), value1), builder.equal(root.get(property2), value2)));
+        //query.select(root).where(builder.and(root.get(property1).equals(value1), root.get(property2).equals(value2));
+        List<T> list = session.createQuery(query).getResultList();
+        session.close();
+        return list;
+    }
+
+    /**
      * Retrieve database objects by specified attributes and values by partial/containing match
      *
      * @param property object property to search

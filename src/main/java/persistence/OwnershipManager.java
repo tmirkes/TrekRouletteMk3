@@ -30,6 +30,7 @@ public class OwnershipManager extends HttpServlet {
         properties = (Properties) getServletContext().getAttribute("dbSettings");
         logger.info("props loaded = " + properties);
 
+
         User currentUser = (User) session.getAttribute("currentUser");
         String queryOwned = properties.getProperty("ownedquery");
         logger.info("query A = " + queryOwned);
@@ -118,14 +119,10 @@ public class OwnershipManager extends HttpServlet {
     public void removeOwnedSeasonsFromCollection(ArrayList<String> seasonsToRemove, String userId) {
         int count = 0;
         while (count < seasonsToRemove.size()) {
-            int userIdInt = Integer.parseInt(userId);
-            int seasonIdInt = Integer.parseInt(seasonsToRemove.get(count));
-            Own newOwn = new Own();
-            User currentUser = userDao.getById(userIdInt);
-            Season newSeason = seasonDao.getById(seasonIdInt);
-            newOwn.setSeasonBySeasonId(newSeason);
-            newOwn.setUserByUserId(currentUser);
-            ownDao.deleteEntity(newOwn);
+            ArrayList<Own> ownToDelete = (ArrayList<Own>) ownDao.getByMultiplePropertyEqual("userId", userId, "seasonId", seasonsToRemove.get(count));
+            logger.info("Owns to delete: " + ownToDelete);
+            Own dropThis = ownToDelete.get(0);
+            ownDao.deleteEntity(dropThis);
             count++;
         }
     }
