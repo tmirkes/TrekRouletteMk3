@@ -14,6 +14,9 @@
 <c:if test="${currentUser != null}">
     <a href="manageOwn"><button>Collection</button></a>
 </c:if>
+<c:if test="${currentUser != null && currentUser.userName == 'admin'}">
+    <a href="update.jsp"><button>Check for Updates</button></a>
+</c:if>
 <c:choose>
     <c:when test="${currentUser == null}">
         <a href = "logIn"><button>Log In</button></a>
