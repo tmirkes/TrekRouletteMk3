@@ -1,6 +1,7 @@
 package controller;
 
 import com.cezarykluczynski.stapi.client.v1.rest.model.EpisodeFullResponse;
+import entity.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.RequestDispatcher;
@@ -23,7 +24,7 @@ public class EpisodeSelect extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        ArrayList<String> episodeList = (ArrayList<String>) session.getAttribute("episodeList");
+        ArrayList<Episode> episodeList = (ArrayList<Episode>) session.getAttribute("episodeList");
         ArrayList<Integer> randomList = (ArrayList<Integer>) session.getAttribute("randomList");
         episodeId = fetcher.selectRandomEpisodeId(episodeList, randomList);
         randomList.remove(0);
