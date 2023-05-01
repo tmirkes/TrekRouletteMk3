@@ -32,9 +32,9 @@ public class OwnershipManager extends HttpServlet {
 
 
         User currentUser = (User) session.getAttribute("currentUser");
-        String queryOwned = properties.getProperty("ownedquery");
+        String queryOwned = properties.getProperty("owned.query");
         logger.info("query A = " + queryOwned);
-        String queryUnowned = properties.getProperty("unownedquery");
+        String queryUnowned = properties.getProperty("unowned.query");
         logger.info("query B = " + queryUnowned);
 
         ArrayList<ArrayList<String>> ownedResults = executeDatabaseSelectStatement(queryOwned, currentUser.getId());
@@ -49,7 +49,6 @@ public class OwnershipManager extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
         String[] seasonChecks = request.getParameterValues("season");
         logger.info("fields = " + seasonChecks);
         ArrayList<String> selectedSeasons = new ArrayList<>();

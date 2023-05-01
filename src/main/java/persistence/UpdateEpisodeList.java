@@ -18,8 +18,6 @@ public class UpdateEpisodeList {
     private TrekDao<Season> seasonDao = new TrekDao(Season.class);
     private StapiRestClient stapiClient = new StapiRestClient();
     private com.cezarykluczynski.stapi.client.api.rest.Episode rawEpisodeData;
-    private List<Episode> currentEpisodes = new ArrayList<>();
-    private ArrayList<Episode> formattedEpisodes = new ArrayList<>();
     private ArrayList<EpisodeBase> episodeList = new ArrayList<>();
     private final Logger logger = LogManager.getLogger(this.getClass());
 
@@ -27,8 +25,7 @@ public class UpdateEpisodeList {
         ArrayList<String> episodeIds = getCurrentEpisodeIds();
         getApiEpisodeList();
         buildCompleteEpisodeList();
-        generateEpisodesFromApiResults(episodeIds);
-        return 0;
+        return generateEpisodesFromApiResults(episodeIds);
     }
 
     public ArrayList<String> getCurrentEpisodeIds() {
@@ -53,19 +50,13 @@ public class UpdateEpisodeList {
         try {
             baseResponse = rawEpisodeData.search(searchCriteria);
             episodeList.addAll(baseResponse.getEpisodes());
-            //logger.info("after first page:" + episodeList.size());
-            // Step 3: retrieve the episode list from the search results
             int pageCounter = 1;
             while (pageCounter < baseResponse.getPage().getTotalPages()) {
                 logger.info("pageCounter = " + pageCounter);
                 logger.info("total pages = " + baseResponse.getPage().getTotalPages());
                 logger.info("total elements = " + baseResponse.getPage().getTotalElements());
-                // Prepare to get the next page
                 searchCriteria.setPageNumber(pageCounter);
-                // Retrieve valid page results based on search criteria
                 baseResponse = rawEpisodeData.search(searchCriteria);
-                //logger.info("page " + baseResponse.getPage().getPageNumber() + ": " + baseResponse.getEpisodes());
-                // Add valid results to episode list
                 episodeList.addAll(baseResponse.getEpisodes());
                 pageCounter++;
             }
@@ -81,13 +72,10 @@ public class UpdateEpisodeList {
         int tally = 0;
         for (int i = 0; i < episodeList.size(); i++) {
             Episode thisEpisode = buildEpisodeTestBody(i);
-//            ArrayList<Episode> oldEpisodes = (ArrayList<Episode>) episodeDao.getByPropertyEqual("stapiEpisodeId", thisEpisode.getStapiEpisodeId());
-//            logger.info("results of the search: " + oldEpisodes);
-//            Episode testEpisode = oldEpisodes.get(0);
-//            logger.info("searched result season: " + testEpisode);
             if (!episodeIds.contains(thisEpisode.getStapiEpisodeId())) {
                 logger.info("NO EPISODE FOUND.  ADD IT NOW.");
-                //int successValue = episodeDao.addEntity(thisEpisode);
+                int successValue = episodeDao.addEntity(thisEpisode);
+                logger.info("Episode added.  New ID = " + successValue);
                 tally++;
             }
         }
@@ -99,6 +87,7 @@ public class UpdateEpisodeList {
         List<Season> seasonMatches = seasonDao.getByPropertyEqual("stapiSeasonId", episodeBase.getSeason().getUid());
         Season thisSeason = seasonMatches.get(0);
         Episode thisEpisode = new Episode(episodeBase.getTitle(), episodeBase.getUid(), thisSeason.getId());
+        thisEpisode.setSeasonBySeasonId(thisSeason);
         //logger.info("episode " + i + ": " + episodeBase);
         logger.info("episode object = " + thisEpisode);
         logger.info("season object = " + thisSeason);

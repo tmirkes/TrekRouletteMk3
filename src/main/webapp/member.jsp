@@ -9,6 +9,8 @@
 <%@ include file="episode.jsp"%>
 <p>member = ${error}</p>
 <p>welcome back, ${currentUser.userName}(${currentUser.id})!</p>
+${episodeList}
+${randomList}
 <%@ include file="footer.jsp"%>
 </body>
 </html>

@@ -3,6 +3,9 @@
     <c:when test="${currentUser == null}">
         <a href="public.jsp"><button>Home</button></a>
     </c:when>
+    <c:when test="${fn:contains(pageContext.request.requestURI, '/manageOwn') || fn:contains(pageContext.request.requestURI, '/collection')}">
+        <a href="snapshot"><button>Home</button></a>
+    </c:when>
     <c:otherwise>
         <a href="member.jsp"><button>Home</button></a>
     </c:otherwise>

@@ -28,7 +28,8 @@ public class UserLoader extends HttpServlet {
         HashMap<String, String> findMe = (HashMap<String, String>) req.getAttribute("userInfo");
         User userData = seeker.searchForUserMatch(findMe);
         session.setAttribute("currentUser", userData);
-        String url = "/getEpisode";
+        session.setAttribute("activeUser", "active");
+        String url = "/snapshot";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(req, resp);
     }

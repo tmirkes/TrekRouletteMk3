@@ -4,6 +4,7 @@ import com.cezarykluczynski.stapi.client.api.StapiRestClient;
 import com.cezarykluczynski.stapi.client.api.dto.SeasonSearchCriteria;
 import com.cezarykluczynski.stapi.client.v1.rest.invoker.ApiException;
 import com.cezarykluczynski.stapi.client.v1.rest.model.*;
+import entity.Episode;
 import entity.Season;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,91 +16,78 @@ public class UpdateSeasonList {
     private TrekDao<Season> seasonDao = new TrekDao(Season.class);
     private StapiRestClient stapiClient = new StapiRestClient();
     private com.cezarykluczynski.stapi.client.api.rest.Season rawSeasonData;
-    private List<Season> currentSeasons = new ArrayList<>();
-    private ArrayList<Season> formattedSeasons = new ArrayList<>();
+    private ArrayList<SeasonBase> seasonList = new ArrayList<>();
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     public int processSeasonTableUpdate() {
-        getCurrentSeasons();
-        int newSeasons = getApiSeasonList();
-        return newSeasons;
+        ArrayList<String> seasonIds = getCurrentSeasonIds();
+        getApiSeasonList();
+        buildCompleteSeasonList();
+        return generateSeasonsFromApiResults(seasonIds);
     }
 
-    public void getCurrentSeasons() {
-        currentSeasons = (ArrayList<Season>) seasonDao.getAll();
+    public ArrayList<String> getCurrentSeasonIds() {
+        ArrayList<Season> currentSeasons = (ArrayList<Season>) seasonDao.getAll();
+        ArrayList<String> currentSeasonIds = new ArrayList<>();
+        for (int i = 0; i < currentSeasons.size(); i++) {
+            currentSeasonIds.add(currentSeasons.get(i).getStapiSeasonId());
+        }
+        return currentSeasonIds;
     }
 
-    public int getApiSeasonList() {
-        int tally = 0;
+    public void getApiSeasonList() {
         // Get complete API episode raw response
         rawSeasonData = stapiClient.getSeason();
-        // Create search criteria
-        SeasonSearchCriteria searchCriteria;
-        // Create basic episode response format
+    }
+    
+    public void buildCompleteSeasonList() {
         SeasonBaseResponse baseResponse;
-        // Create list to contain individual episodes
-        ArrayList<SeasonBase> seasonList = new ArrayList<>();
-        // Create variable to hold detailed episode data
-        SeasonFullResponse completeSeason = new SeasonFullResponse();
-        // Create counter to process all pages of search results
-        int index = 0;
-        // Use try/catch to process API call
+        SeasonSearchCriteria searchCriteria = new SeasonSearchCriteria();
+        searchCriteria.setSeasonNumberFrom(1);
+        searchCriteria.setSeasonNumberTo(10);
         try {
-            // Step 1: create a criteria object and configure it
-            searchCriteria = new SeasonSearchCriteria();
-            searchCriteria.setSeasonNumberFrom(1);
-            searchCriteria.setSeasonNumberTo(10);
-            // Step 2: perform the search using the criteria object
             baseResponse = rawSeasonData.search(searchCriteria);
             seasonList.addAll(baseResponse.getSeasons());
-            logger.info("after first page:" + seasonList.size());
-            // Step 3: retrieve the episode list from the search results
+            searchCriteria = new SeasonSearchCriteria();
             int pageCounter = 1;
             while (pageCounter < baseResponse.getPage().getTotalPages()) {
                 logger.info("pageCounter = " + pageCounter);
                 logger.info("total pages = " + baseResponse.getPage().getTotalPages());
                 logger.info("total elements = " + baseResponse.getPage().getTotalElements());
-                // Prepare to get the next page
                 searchCriteria.setPageNumber(pageCounter);
-                // Retrieve valid page results based on search criteria
                 baseResponse = rawSeasonData.search(searchCriteria);
-                logger.info("page " + baseResponse.getPage().getPageNumber() + ": " + baseResponse.getSeasons());
-                // Add valid results to episode list
                 seasonList.addAll(baseResponse.getSeasons());
                 pageCounter++;
             }
             logger.info("after all pages: " + seasonList.size());
             logger.info("all seasons: " + seasonList);
-            tally = generateSeasonsFromApiResults(seasonList);
         } catch (ApiException apie) {
             logger.error(apie);
         } catch (Exception e) {
             logger.error(e);
         }
-        return tally;
     }
 
-    public int generateSeasonsFromApiResults(ArrayList<SeasonBase> inputSeasonData) {
+    public int generateSeasonsFromApiResults(ArrayList<String> seasonIds) {
         int tally = 0;
-        for (int i = 0; i < inputSeasonData.size(); i++) {
-            SeasonBase seasonBase = inputSeasonData.get(i);
-            Season thisSeason = new Season(seasonBase.getSeries().getTitle(), seasonBase.getSeasonNumber(), seasonBase.getUid());
-            logger.info("season " + i + ": " + seasonBase);
-            logger.info("season object = " + thisSeason);
-            ArrayList<Season> oldSeasons = (ArrayList<Season>) seasonDao.getByPropertyEqual("stapiSeasonId", thisSeason.getStapiSeasonId());
-            logger.info("results of the search: " + oldSeasons);
-            Season testSeason = oldSeasons.get(0);
-            logger.info("searched result season: " + testSeason);
-            if (seasonDao.getByPropertyEqual("stapiSeasonId", thisSeason.getStapiSeasonId()) == null) {
+        for (int i = 0; i < seasonList.size(); i++) {
+            Season thisSeason = buildSeasonTestBody(i);
+            if (!seasonIds.contains(thisSeason.getStapiSeasonId())) {
                 logger.info("NO SEASON FOUND.  ADD IT NOW.");
+                int successValue = seasonDao.addEntity(thisSeason);
+                logger.info("Season added. New ID = " + successValue);
                 tally++;
-                Season season = new Season();
-                season.setSeries(inputSeasonData.get(i).getSeries().getTitle());
-                season.setSeason(inputSeasonData.get(i).getSeasonNumber());
-                season.setStapiSeasonId(inputSeasonData.get(i).getUid());
-                int successValue = seasonDao.addEntity(season);
             }
         }
         return tally;
+    }
+    
+    public Season buildSeasonTestBody(int i) {
+        SeasonBase seasonBase = seasonList.get(i);
+        Season thisSeason = new Season(seasonBase.getSeries().getTitle(), seasonBase.getSeasonNumber(), seasonBase.getUid());
+        //logger.info("season " + i + ": " + seasonBase);
+        logger.info("season object = " + thisSeason);
+        logger.info("season object = " + thisSeason);
+        return thisSeason;
     }
 }
