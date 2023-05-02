@@ -18,14 +18,10 @@ unowned = ${unowned.size()}<br>
                     <p>You don't have any series available.  Use the other form on this page to add some to your collection!</p>
                 </c:when>
                 <c:otherwise>
-
                 <input hidden name="userIdRemove" id="userIdRemove" value="${currentUser.id}">
             <c:forEach var="own" items="${owned}" varStatus="status">
-                <c:set var="series" value="${0 + (3 * status.index)}"></c:set>
-                <c:set var="season" value="${1 + (3 * status.index)}"></c:set>
-                <c:set var="id" value="${2 + (3 * status.index)}"></c:set>
-                <input type="checkbox" name="season" id="<c:out value="${own.get(id)}"></c:out>" value="<c:out value="${own.get(id)}"></c:out>">
-                <label for="<c:out value="${own.get(id)}"></c:out>"><c:out value="${own.get(series)}"></c:out> Season <c:out value="${own.get(season)}"></c:out></label><br>
+                <input type="checkbox" name="season" id="<c:out value="${own.id}"></c:out>" value="<c:out value="${own.id}"></c:out>">
+                <label for="<c:out value="${own.id}"></c:out>"><c:out value="${own.series.substring(11, own.series.length())}"></c:out> Season <c:out value="${own.season}"></c:out></label><br>
             </c:forEach>
                     <input hidden name="operation" id="opRemove" value="remove">
             <button>Remove seasons</button>
@@ -38,20 +34,23 @@ unowned = ${unowned.size()}<br>
         <form action="${pageContext.request.contextPath}/manageOwn" method="POST">
             <fieldset>
             <legend>Seasons you do not own</legend>
-            <input hidden name="userIdAdd" id="userIdAdd" value="${currentUser.id}">
-            <c:forEach var="unown" items="${unowned}" varStatus="status">
-                <c:set var="series" value="${0 + (3 * status.index)}"></c:set>
-                <c:set var="season" value="${1 + (3 * status.index)}"></c:set>
-                <c:set var="id" value="${2 + (3 * status.index)}"></c:set>
-                <input type="checkbox" name="season" id="<c:out value="${unown.get(id)}"></c:out>" value="<c:out value="${unown.get(id)}"></c:out>">
-                <label for="<c:out value="${unown.get(id)}"></c:out>"><c:out value="${unown.get(series)}"></c:out> Season <c:out value="${unown.get(season)}"></c:out></label><br>
-            </c:forEach>
-                <input hidden name="operation" id="opAdd" value="add">
-            <button>Add seasons</button>
+                <c:choose>
+                    <c:when test="${unowned.size() == 0}">
+                        <p>You own all the Star Trek there is.</p>
+                    </c:when>
+                    <c:otherwise>
+                        <input hidden name="userIdAdd" id="userIdAdd" value="${currentUser.id}">
+                        <c:forEach var="unown" items="${unowned}" varStatus="status">
+                            <input type="checkbox" name="season" id="<c:out value="${unown.id}"></c:out>" value="<c:out value="${unown.id}"></c:out>">
+                            <label for="<c:out value="${unown.id}"></c:out>"><c:out value="${unown.series.substring(11, unown.series.length())}"></c:out> Season <c:out value="${unown.season}"></c:out></label><br>
+                        </c:forEach>
+                        <input hidden name="operation" id="opAdd" value="add">
+                        <button>Add seasons</button>
+                    </c:otherwise>
+                </c:choose>
             </fieldset>
         </form>
     </div>
-
 <%@ include file="footer.jsp"%>
 </body>
 </html>
