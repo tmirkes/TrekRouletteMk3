@@ -1,0 +1,12 @@
+delete from own;
+alter table own AUTO_INCREMENT = 1;
+delete from view;
+alter table view AUTO_INCREMENT = 1;
+delete from episode;
+alter table episode AUTO_INCREMENT = 1;
+delete from user;
+alter table user AUTO_INCREMENT = 1;
+delete from season;
+alter table season AUTO_INCREMENT = 1;
+delete from status;
+alter table status AUTO_INCREMENT = 1;

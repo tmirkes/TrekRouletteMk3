@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @WebServlet(urlPatterns = {"/snapshot"})
 public class DatabaseSnapshot extends HttpServlet {
     private final int QUEUE_SIZE = 25;
-    private int maxCount = 0;
+    protected int maxCount = 0;
     private int listLength = 0;
     private final Logger logger = LogManager.getLogger(this.getClass());
     private final TrekDao<Episode> episodeDao = new TrekDao<>(Episode.class);

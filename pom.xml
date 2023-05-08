@@ -26,13 +26,27 @@
     <commonsio-version>2.11.0</commonsio-version>
     <stapi-version>0.1.2</stapi-version>
     <javax-version>7.0</javax-version>
+    <javax-servlet-version>2.5</javax-servlet-version>
     <jersey-version>2.29.1</jersey-version>
     <jackson-version>2.10.0</jackson-version>
     <jakarta-xml-bind-version>2.3.2</jakarta-xml-bind-version>
     <jakarta-servlet-api-version>6.0.0</jakarta-servlet-api-version>
+    <byte-buddy-version>1.14.4</byte-buddy-version>
   </properties>
   <!-- Individual dependencies -->
   <dependencies>
+    <!-- Byte Buddy for Mockito -->
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-dep</artifactId>
+      <version>${byte-buddy-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.bytebuddy</groupId>
+      <artifactId>byte-buddy-agent</artifactId>
+      <version>${byte-buddy-version}</version>
+      <scope>test</scope>
+    </dependency>
     <!-- Javax XML Bind update -->
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
@@ -89,6 +103,12 @@
       <groupId>javax</groupId>
       <artifactId>javaee-web-api</artifactId>
       <version>${javax-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${javax-servlet-version}</version>
+      <scope>provided</scope>
     </dependency>
     <!-- Star Trek API (STAPI) -->
     <dependency>
@@ -173,6 +193,13 @@
       <artifactId>mockito-core</artifactId>
       <version>${mockito-version}</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-inline</artifactId>
+        </exclusion>
+      </exclusions>
+
     </dependency>
     <!-- Log4J -->
     <dependency>

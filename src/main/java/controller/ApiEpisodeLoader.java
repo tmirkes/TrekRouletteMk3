@@ -8,8 +8,8 @@ import org.apache.logging.log4j.Logger;
 
 public class ApiEpisodeLoader {
     private EpisodeFullResponse chosenEpisode = new EpisodeFullResponse();
-    private StapiRestClient stapiClient = new StapiRestClient();
-    private final Logger logger = LogManager.getLogger(this.getClass());
+    StapiRestClient stapiClient = new StapiRestClient();
+    Logger logger = LogManager.getLogger(this.getClass());
 
     public EpisodeFullResponse getEpisodeData(String episodeId) {
         try {
