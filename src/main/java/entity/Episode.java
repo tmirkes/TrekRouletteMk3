@@ -23,7 +23,7 @@ public class Episode {
     @ManyToOne
     @JoinColumn(name = "season_id", referencedColumnName = "id", nullable = false)
     private Season seasonBySeasonId;
-    @OneToMany(mappedBy = "episodeByEpisodeId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "episodeByEpisodeId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<View> viewsById;
 
     public Episode() {
@@ -105,4 +105,6 @@ public class Episode {
     public void setViewsById(List<View> viewsById) {
         this.viewsById = viewsById;
     }
+
+    public void addViewsById(View viewById) { this.viewsById.add(viewById); }
 }

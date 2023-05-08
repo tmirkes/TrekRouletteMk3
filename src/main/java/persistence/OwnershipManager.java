@@ -5,6 +5,8 @@ import entity.Season;
 import entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utility.SeasonComparator;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,10 +30,13 @@ public class OwnershipManager extends HttpServlet {
 
         User currentUser = (User) session.getAttribute("currentUser");
         Set<Own> ownedSet = currentUser.getOwnsById();
-        ArrayList<Season> owned = new ArrayList<>();
+
+        List<Season> owned = new ArrayList<>();
         for (Own own : ownedSet) {
             owned.add(seasonDao.getById(own.getSeasonId()));
         }
+        Collections.sort(owned, new SeasonComparator());
+
         ArrayList<Season> unowned = (ArrayList<Season>) seasonDao.getAll();
         unowned.removeIf(season -> owned.contains(season));
         session.setAttribute("owned", owned);

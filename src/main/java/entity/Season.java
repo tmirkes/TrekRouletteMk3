@@ -106,4 +106,6 @@ public class Season {
     }
 
     public void addEpisodesById(Episode episode) { this.episodesById.add(episode); }
+
+    public void addOwnsById(Own own) { this.ownsById.add(own); }
 }

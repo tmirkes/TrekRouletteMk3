@@ -61,4 +61,6 @@ public class Status {
     public void setViewsById(List<View> viewsById) {
         this.viewsById = viewsById;
     }
+
+    public void addViewsById(View view) { this.viewsById.add(view); }
 }

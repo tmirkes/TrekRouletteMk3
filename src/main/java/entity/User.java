@@ -112,6 +112,8 @@ public class User {
         this.ownsById = ownsById;
     }
 
+    public void addOwnsById(Own ownById) { this.ownsById.add(ownById); }
+
     public Set<View> getViewsById() {
         return viewsById;
     }
@@ -119,4 +121,6 @@ public class User {
     public void setViewsById(Set<View> viewsById) {
         this.viewsById = viewsById;
     }
+
+    public void addViewsById(View viewById) { this.viewsById.add(viewById); }
 }

@@ -20,8 +20,9 @@ public class DatabaseSnapshot extends HttpServlet {
     private int maxCount = 0;
     private int listLength = 0;
     private final Logger logger = LogManager.getLogger(this.getClass());
-    private TrekDao<Episode> episodeDao = new TrekDao(Episode.class);
-    private TrekDao<Season> seasonDao = new TrekDao(Season.class);
+    private final TrekDao<Episode> episodeDao = new TrekDao<>(Episode.class);
+    private final TrekDao<Season> seasonDao = new TrekDao<>(Season.class);
+    private final TrekDao<View> viewDao = new TrekDao<>(View.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,6 +33,8 @@ public class DatabaseSnapshot extends HttpServlet {
         ArrayList<Episode> completeEpisodeList;
         // List of random numbers for episode selection
         ArrayList<Integer> randomList;
+        // List of episodes that have been viewed already
+        ArrayList<Episode> viewedList = new ArrayList<>();
 
         HttpSession session = request.getSession();
 
@@ -58,6 +61,22 @@ public class DatabaseSnapshot extends HttpServlet {
                 collectionSpecificEpisodeList.addAll(episodeDao.getByPropertyEqual("seasonId", String.valueOf(season.getId())));
             }
             logger.info("Episodes: " + collectionSpecificEpisodeList);
+
+            // Get the episode IDs of viewed episodes
+            ArrayList<View> userViews = (ArrayList<View>) viewDao.getByPropertyEqual("userId", Integer.toString(currentUser.getId()));
+            for (View view : userViews) {
+                if (view.getStatusId() != 3) {
+                    Episode episode = (Episode) episodeDao.getById(view.getEpisodeId());
+                    viewedList.add(episode);
+                }
+            }
+            logger.info("Finished: " + viewedList);
+
+            // Pare out viewed episodes
+            logger.info("collection before: " + collectionSpecificEpisodeList.size());
+            collectionSpecificEpisodeList.removeAll(viewedList);
+            logger.info("viewed eps: " + viewedList.size());
+            logger.info("collection after: " + collectionSpecificEpisodeList.size());
 
             // Set retrieval list size
             if (collectionSpecificEpisodeList.size() < QUEUE_SIZE) {
@@ -94,11 +113,23 @@ public class DatabaseSnapshot extends HttpServlet {
 
     public ArrayList<Integer> buildRandomSequence(int maxNumber) {
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < maxCount; i++) {
+        int count = 0;
+        while (count < maxCount) {
             int number = ThreadLocalRandom.current().nextInt(0, maxNumber);
-            logger.info("number " + i + ": " + number);
-            list.add(number);
+            logger.info("number " + count + ": " + number);
+            if (checkForUniqueness(list, number)) {
+                list.add(number);
+                count++;
+            }
         }
         return list;
+    }
+
+    public boolean checkForUniqueness(ArrayList<Integer> theList, int currentValue) {
+        boolean addValue = false;
+        if (!theList.contains(currentValue)) {
+            addValue = true;
+        }
+        return addValue;
     }
 }
