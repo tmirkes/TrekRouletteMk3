@@ -23,62 +23,29 @@ public class DatabaseSnapshot extends HttpServlet {
     private final TrekDao<Episode> episodeDao = new TrekDao<>(Episode.class);
     private final TrekDao<Season> seasonDao = new TrekDao<>(Season.class);
     private final TrekDao<View> viewDao = new TrekDao<>(View.class);
+    private BuildUserOwnList builder = new BuildUserOwnList();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ArrayList<Season> seasonList = new ArrayList<>();
-        // List of episodes available by collection
         ArrayList<Episode> collectionSpecificEpisodeList = new ArrayList<>();
-        // Complete set of available episodes
         ArrayList<Episode> completeEpisodeList;
-        // List of random numbers for episode selection
         ArrayList<Integer> randomList;
-        // List of episodes that have been viewed already
-        ArrayList<Episode> viewedList = new ArrayList<>();
+        ArrayList<Episode> viewedList;
 
         HttpSession session = request.getSession();
 
-        // Get the current user
         User currentUser = (User) session.getAttribute("currentUser");
 
-        // Get all episodes
-        completeEpisodeList = (ArrayList<Episode>) episodeDao.getAll();
+        completeEpisodeList = builder.getCompleteEpisodeList();
         logger.info("All episodes: " + completeEpisodeList.size());
 
         if (currentUser != null) {
-            // Get the current user's owns
-            Set<Own> ownedSeasons = currentUser.getOwnsById();
-            logger.info("Owned seasons: " + ownedSeasons.size());
+            seasonList = builder.getOwnedSeasons(currentUser);
+            collectionSpecificEpisodeList = builder.getCollectionBasedEpisodes(seasonList);
+            viewedList = builder.getEpisodeIdsOfViewedEpisodes(currentUser);
+            collectionSpecificEpisodeList = builder.pareOutWatchedEpisodes(collectionSpecificEpisodeList, viewedList);
 
-            // Get the current user's owned seasons
-            for (Own owned : ownedSeasons) {
-                seasonList.add(seasonDao.getById(owned.getSeasonId()));
-            }
-            logger.info("Seasons: " + seasonList);
-
-            // Get the current user's owned seasons' episodes
-            for (Season season : seasonList) {
-                collectionSpecificEpisodeList.addAll(episodeDao.getByPropertyEqual("seasonId", String.valueOf(season.getId())));
-            }
-            logger.info("Episodes: " + collectionSpecificEpisodeList);
-
-            // Get the episode IDs of viewed episodes
-            ArrayList<View> userViews = (ArrayList<View>) viewDao.getByPropertyEqual("userId", Integer.toString(currentUser.getId()));
-            for (View view : userViews) {
-                if (view.getStatusId() != 3) {
-                    Episode episode = (Episode) episodeDao.getById(view.getEpisodeId());
-                    viewedList.add(episode);
-                }
-            }
-            logger.info("Finished: " + viewedList);
-
-            // Pare out viewed episodes
-            logger.info("collection before: " + collectionSpecificEpisodeList.size());
-            collectionSpecificEpisodeList.removeAll(viewedList);
-            logger.info("viewed eps: " + viewedList.size());
-            logger.info("collection after: " + collectionSpecificEpisodeList.size());
-
-            // Set retrieval list size
             if (collectionSpecificEpisodeList.size() < QUEUE_SIZE) {
                 maxCount = collectionSpecificEpisodeList.size();
                 listLength = maxCount;
@@ -91,11 +58,9 @@ public class DatabaseSnapshot extends HttpServlet {
             maxCount = QUEUE_SIZE;
             logger.info("Expected list length: " + listLength);
         }
-        // Build list of random numbers
-        randomList = buildRandomSequence(listLength);
-        logger.info("Random list length: " + randomList.size());
 
-        // Pick episode list based on logged in user
+        randomList = builder.buildRandomSequence(listLength, maxCount);
+
         if (currentUser != null) {
             session.setAttribute("episodeList", collectionSpecificEpisodeList);
             logger.info("SPECIFIC LIST USED.");
@@ -109,27 +74,5 @@ public class DatabaseSnapshot extends HttpServlet {
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);
 
-    }
-
-    public ArrayList<Integer> buildRandomSequence(int maxNumber) {
-        ArrayList<Integer> list = new ArrayList<>();
-        int count = 0;
-        while (count < maxCount) {
-            int number = ThreadLocalRandom.current().nextInt(0, maxNumber);
-            logger.info("number " + count + ": " + number);
-            if (checkForUniqueness(list, number)) {
-                list.add(number);
-                count++;
-            }
-        }
-        return list;
-    }
-
-    public boolean checkForUniqueness(ArrayList<Integer> theList, int currentValue) {
-        boolean addValue = false;
-        if (!theList.contains(currentValue)) {
-            addValue = true;
-        }
-        return addValue;
     }
 }

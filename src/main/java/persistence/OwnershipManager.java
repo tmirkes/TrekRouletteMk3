@@ -23,6 +23,7 @@ public class OwnershipManager extends HttpServlet {
     private final TrekDao<Season> seasonDao = new TrekDao(Season.class);
     private final TrekDao<User> userDao = new TrekDao(User.class);
     private final Logger logger = LogManager.getLogger(this.getClass());
+    private ModifyOwnership editOwns = new ModifyOwnership();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,43 +57,14 @@ public class OwnershipManager extends HttpServlet {
         ArrayList<String> selectedSeasons = new ArrayList<>(Arrays.asList(seasonChecks));
         logger.info("fields to add = " + selectedSeasons);
         if (request.getParameter("operation").compareTo("add") == 0) {
-            addNewSeasonsToCollection(selectedSeasons, request.getParameter("userIdAdd"));
+            editOwns.addNewSeasonsToCollection(selectedSeasons, request.getParameter("userIdAdd"));
         } else if (request.getParameter("operation").compareTo("remove") == 0) {
-            removeOwnedSeasonsFromCollection(selectedSeasons, request.getParameter("userIdRemove"));
+            editOwns.removeOwnedSeasonsFromCollection(selectedSeasons, request.getParameter("userIdRemove"));
         } else {
             logger.error("Invalid submission: function not defined for page collection.jsp.  Returning to origin.");
         }
         User updatedUser = userDao.getById(currentUser.getId());
         session.setAttribute("currentUser", updatedUser);
         doGet(request, response);
-    }
-
-    public void addNewSeasonsToCollection(ArrayList<String> seasonsToAdd, String userId) {
-        int commit;
-        for (int i = 0; i < seasonsToAdd.size(); i++) {
-            int userIdInt = Integer.parseInt(userId);
-            int seasonIdInt = Integer.parseInt(seasonsToAdd.get(i));
-            Own newOwn = new Own();
-            User currentUser = userDao.getById(userIdInt);
-            Season newSeason = seasonDao.getById(seasonIdInt);
-            newOwn.setSeasonBySeasonId(newSeason);
-            newOwn.setUserByUserId(currentUser);
-            commit = ownDao.addEntity(newOwn);
-            if (commit == 0) {
-                logger.error("New Own failed to write to database.");
-            } else {
-                logger.info("New Own created; ID = " + commit + ".");
-            }
-        }
-    }
-
-    public void removeOwnedSeasonsFromCollection(ArrayList<String> seasonsToRemove, String userId) {
-        for (int i = 0; i < seasonsToRemove.size(); i++) {
-            ArrayList<Own> ownToDelete = (ArrayList<Own>) ownDao.getByMultiplePropertyEqual("userId", userId, "seasonId", seasonsToRemove.get(i));
-            logger.info("Owns to delete: " + ownToDelete);
-            Own dropThis = ownToDelete.get(0);
-            ownDao.deleteEntity(dropThis);
-            logger.info("Own with ID " + dropThis.getId() + "deleted.");
-        }
     }
 }

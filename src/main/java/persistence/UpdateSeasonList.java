@@ -16,7 +16,7 @@ public class UpdateSeasonList {
     private TrekDao<Season> seasonDao = new TrekDao(Season.class);
     private StapiRestClient stapiClient = new StapiRestClient();
     private com.cezarykluczynski.stapi.client.api.rest.Season rawSeasonData;
-    private ArrayList<SeasonBase> seasonList = new ArrayList<>();
+    protected ArrayList<SeasonBase> seasonList = new ArrayList<>();
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     public int processSeasonTableUpdate() {
@@ -85,8 +85,6 @@ public class UpdateSeasonList {
     public Season buildSeasonTestBody(int i) {
         SeasonBase seasonBase = seasonList.get(i);
         Season thisSeason = new Season(seasonBase.getSeries().getTitle(), seasonBase.getSeasonNumber(), seasonBase.getUid());
-        //logger.info("season " + i + ": " + seasonBase);
-        logger.info("season object = " + thisSeason);
         logger.info("season object = " + thisSeason);
         return thisSeason;
     }
