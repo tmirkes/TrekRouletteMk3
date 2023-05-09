@@ -360,7 +360,7 @@ a  {
 .button#bottom-left a  {
     background-color:  #969;
 }
-.button.content-action a {
+.button.content-action a, .button.content-action {
     background-color: #969;
 }
 .button#top-right a  {

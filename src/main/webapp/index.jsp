@@ -1,3 +1,4 @@
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <c:import url="head.jsp"></c:import>
@@ -88,7 +89,7 @@
             <h1>Welcome to Trek Roulette</h1>
 
             <div>
-                <div>
+                <div style="float: left; width: 50%;">
                     <h2>What is Trek Roulette, you ask?</h2>
                     <p>Trek Roulette, originally conceived by a group of Star Trek fans from Milwaukee, WI, is a tool that allows you to randomly receive a recommendation of which Star Trek episode to watch for when you're feeling a bit indecisive.</p>
                     <p>By clicking <em>Take a Spin</em>, you will be taken to a page that will allow you to receive a recommendation, or have Trek Roulette <em>Suggest</em> another.  The selection draws from the whole of broadcast Star Trek, from the Original Series through the latest and greatest episodic Trek.</p>
@@ -96,7 +97,7 @@
                     <p>Those are the basics, so if you're ready, <em>Take a Spin</em> and enjoy some random Star Trek!</p>
                     <p><strong>Live long and prosper!</strong></p>
                 </div>
-                <div style="justify-content: center; text-align: center;">
+                <div style="justify-content: center; align-content: center; float: left; width: 50%;">
                     <div class="button content-action" style="margin: auto;"><a href="${pageContext.request.contextPath}/snapshot">Take a spin</a></div>
                 </div>
             </div>

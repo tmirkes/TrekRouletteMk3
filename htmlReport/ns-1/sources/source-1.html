@@ -1,0 +1,219 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CognitoJWTParser</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">auth</a>
+</div>
+
+<h1>Coverage Summary for Class: CognitoJWTParser (auth)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CognitoJWTParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package auth;
+&nbsp;/*
+&nbsp;// Copyright 2013-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+&nbsp;// SPDX-License-Identifier: MIT-0
+&nbsp; */
+&nbsp;
+&nbsp;
+&nbsp;import org.json.JSONObject;
+&nbsp;
+&nbsp;import java.io.UnsupportedEncodingException;
+&nbsp;import java.security.InvalidParameterException;
+&nbsp;import java.util.Base64;
+&nbsp;import java.util.Base64.Decoder;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class for all operations on JWT.
+&nbsp; */
+<b class="nc">&nbsp;public class CognitoJWTParser {</b>
+&nbsp;    private static final int HEADER = 0;
+&nbsp;    private static final int PAYLOAD = 1;
+&nbsp;    private static final int SIGNATURE = 2;
+&nbsp;    private static final int JWT_PARTS = 3;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns header for a JWT as a JSON object.
+&nbsp;     *
+&nbsp;     * @param jwt REQUIRED: valid JSON Web Token as String.
+&nbsp;     * @return header as a JSONObject.
+&nbsp;     */
+&nbsp;    public static JSONObject getHeader(String jwt) {
+&nbsp;        try {
+<b class="nc">&nbsp;            validateJWT(jwt);</b>
+<b class="nc">&nbsp;            Decoder dec= Base64.getDecoder();</b>
+<b class="nc">&nbsp;            final byte[] sectionDecoded = dec.decode(jwt.split(&quot;\\.&quot;)[HEADER]);</b>
+<b class="nc">&nbsp;            final String jwtSection = new String(sectionDecoded, &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;            return new JSONObject(jwtSection);</b>
+<b class="nc">&nbsp;        } catch (final UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(e.getMessage());</b>
+<b class="nc">&nbsp;        } catch (final Exception e) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(&quot;error in parsing JSON&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns payload of a JWT as a JSON object.
+&nbsp;     *
+&nbsp;     * @param jwt REQUIRED: valid JSON Web Token as String.
+&nbsp;     * @return payload as a JSONObject.
+&nbsp;     */
+&nbsp;    public static JSONObject getPayload(String jwt) {
+&nbsp;        try {
+<b class="nc">&nbsp;            validateJWT(jwt);</b>
+<b class="nc">&nbsp;            Decoder dec= Base64.getDecoder();</b>
+<b class="nc">&nbsp;            final String payload = jwt.split(&quot;\\.&quot;)[PAYLOAD];</b>
+<b class="nc">&nbsp;            final byte[] sectionDecoded = dec.decode(payload);</b>
+<b class="nc">&nbsp;            final String jwtSection = new String(sectionDecoded, &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;            return new JSONObject(jwtSection);</b>
+<b class="nc">&nbsp;        } catch (final UnsupportedEncodingException e) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(e.getMessage());</b>
+<b class="nc">&nbsp;        } catch (final Exception e) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(&quot;error in parsing JSON&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns signature of a JWT as a String.
+&nbsp;     *
+&nbsp;     * @param jwt REQUIRED: valid JSON Web Token as String.
+&nbsp;     * @return signature as a String.
+&nbsp;     */
+&nbsp;    public static String getSignature(String jwt) {
+&nbsp;        try {
+<b class="nc">&nbsp;            validateJWT(jwt);</b>
+<b class="nc">&nbsp;            Decoder dec= Base64.getDecoder();</b>
+<b class="nc">&nbsp;            final byte[] sectionDecoded = dec.decode(jwt.split(&quot;\\.&quot;)[SIGNATURE]);</b>
+<b class="nc">&nbsp;            return new String(sectionDecoded, &quot;UTF-8&quot;);</b>
+<b class="nc">&nbsp;        } catch (final Exception e) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(&quot;error in parsing JSON&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a claim, from the {@code JWT}s&#39; payload, as a String.
+&nbsp;     *
+&nbsp;     * @param jwt   REQUIRED: valid JSON Web Token as String.
+&nbsp;     * @param claim REQUIRED: claim name as String.
+&nbsp;     * @return claim from the JWT as a String.
+&nbsp;     */
+&nbsp;    public static String getClaim(String jwt, String claim) {
+&nbsp;        try {
+<b class="nc">&nbsp;            final JSONObject payload = getPayload(jwt);</b>
+<b class="nc">&nbsp;            final Object claimValue = payload.get(claim);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (claimValue != null) {</b>
+<b class="nc">&nbsp;                return claimValue.toString();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;        } catch (final Exception e) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(&quot;invalid token&quot;);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if {@code JWT} is a valid JSON Web Token.
+&nbsp;     *
+&nbsp;     * @param jwt REQUIRED: The JWT as a {@link String}.
+&nbsp;     */
+&nbsp;    public static void validateJWT(String jwt) {
+&nbsp;        // Check if the the JWT has the three parts
+<b class="nc">&nbsp;        final String[] jwtParts = jwt.split(&quot;\\.&quot;);</b>
+<b class="nc">&nbsp;        if (jwtParts.length != JWT_PARTS) {</b>
+<b class="nc">&nbsp;            throw new InvalidParameterException(&quot;not a JSON Web Token&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-09 16:01</div>
+</div>
+</body>
+</html>

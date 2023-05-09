@@ -1,3 +1,4 @@
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <c:import url="head.jsp"></c:import>
@@ -98,7 +99,7 @@
                             </c:otherwise>
                         </c:choose>
                     </fieldset>
-                    <div style="width: 100%; justify-content: center;"><div class="button content-action" style="margin: auto;">Remove access</div></div>
+                    <div style="width: 100%; justify-content: center;"><button class="button content-action" style="margin: auto;">Remove access</button></div>
                 </form>
             </div>
             <div style="display: inline-block; width: 50%; height: 100%;">
@@ -119,7 +120,7 @@
                             </c:otherwise>
                         </c:choose>
                     </fieldset>
-                    <div style="width: 100%; justify-content: center;"><div class="button content-action" style="margin: auto;">Add access</div></div>
+                    <div style="width: 100%; justify-content: center;"><button class="button content-action" style="margin: auto;">Add access</button></div>
                 </form>
             </div>
 

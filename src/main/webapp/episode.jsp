@@ -1,5 +1,5 @@
-<div>
-    <p>You should watch...</p>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %><div>
+    <h3>You should watch...</h3>
     <div>
         <div style="width: 50%; float: left;">
             <h2>${selection.episode.title}</h2>
@@ -11,7 +11,7 @@
                             <input hidden name="viewType" value="start">
                             <input hidden name="userId" value="${currentUser.id}">
                             <input hidden name="episodeId" value="${episodeObject.id}">
-                            <div class="button content-action" style="margin: auto;">Start Watching</div>
+                            <button class="button content-action" style="margin: auto;">Start Watching</button>
                         </form>
                     </c:when>
                     <c:when test="${watchState == 1}">
@@ -19,11 +19,11 @@
                             <input hidden name="viewType" value="done">
                             <input hidden name="userId" value="${currentUser.id}">
                             <input hidden name="episodeId" value="${episodeObject.id}">
-                            <div class="button content-action" style="margin: auto;">Finished Viewing</div>
+                            <button class="button content-action" style="margin: auto;">Finished Viewing</button>
                         </form>
                     </c:when>
                     <c:otherwise>
-                        <div class="button content-action" style="margin: auto;">Viewed</div>
+                        <button class="button content-action" style="margin: auto;">Viewed</button>
                     </c:otherwise>
                 </c:choose>
             </c:if>

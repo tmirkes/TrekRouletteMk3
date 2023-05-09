@@ -1,3 +1,4 @@
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <c:import url="head.jsp"></c:import>
@@ -102,11 +103,11 @@
             <table>
                 <thead>
                 <tr colspan="2">
-                    <td>Technologies Leveraged</td>
+                    <td><h4>Technologies Leveraged</h4></td>
                 </tr>
                 <tr>
-                    <td>Application</td>
-                    <td>Purpose</td>
+                    <td style="width: 30%;">Application</td>
+                    <td style="width: 30%;">Purpose</td>
                 </tr>
                 </thead>
                 <tbody>

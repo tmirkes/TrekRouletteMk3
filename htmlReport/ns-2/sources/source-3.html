@@ -1,0 +1,218 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EpisodeSelect</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">controller</a>
+</div>
+
+<h1>Coverage Summary for Class: EpisodeSelect (controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EpisodeSelect</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.4%
+  </span>
+  <span class="absValue">
+    (29/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package controller;
+&nbsp;
+&nbsp;import com.cezarykluczynski.stapi.client.v1.rest.model.EpisodeFullResponse;
+&nbsp;import entity.*;
+&nbsp;import persistence.*;
+&nbsp;import org.apache.logging.log4j.LogManager;
+&nbsp;import org.apache.logging.log4j.Logger;
+&nbsp;import javax.servlet.RequestDispatcher;
+&nbsp;import javax.servlet.http.*;
+&nbsp;import javax.servlet.annotation.*;
+&nbsp;import javax.servlet.ServletException;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import javax.servlet.http.HttpServletResponse;
+&nbsp;import javax.servlet.http.HttpSession;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;@WebServlet(name = &quot;EpisodeSelect&quot;, urlPatterns = &quot;/getEpisode&quot;)
+<b class="fc">&nbsp;public class EpisodeSelect extends HttpServlet {</b>
+<b class="fc">&nbsp;    View currentView = null;</b>
+<b class="fc">&nbsp;    User currentUser = null;</b>
+<b class="fc">&nbsp;    Episode stapiEpisode = null;</b>
+&nbsp;
+<b class="fc">&nbsp;    private TrekDao&lt;Episode&gt; episodeDao = new TrekDao&lt;&gt;(Episode.class);</b>
+<b class="fc">&nbsp;    private FetchEpisodeId fetcher = new FetchEpisodeId();</b>
+<b class="fc">&nbsp;    private String episodeId = &quot;&quot;;</b>
+<b class="fc">&nbsp;    private final Logger logger = LogManager.getLogger(this.getClass());</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+&nbsp;        // Get session
+<b class="fc">&nbsp;        HttpSession session = request.getSession();</b>
+&nbsp;        // Get lists of episodes and random numbers
+<b class="fc">&nbsp;        ArrayList&lt;Episode&gt; episodeList = (ArrayList&lt;Episode&gt;) session.getAttribute(&quot;episodeList&quot;);</b>
+<b class="fc">&nbsp;        ArrayList&lt;Integer&gt; randomList = (ArrayList&lt;Integer&gt;) session.getAttribute(&quot;randomList&quot;);</b>
+&nbsp;        // Pass off lists to Fetcher object to select an episode ID
+<b class="fc">&nbsp;        episodeId = fetcher.selectRandomEpisodeId(episodeList, randomList);</b>
+&nbsp;        // Drop the first random number from randomList
+<b class="fc">&nbsp;        randomList.remove(0);</b>
+&nbsp;        // Replace the modified randomList for the old one in the session attributes
+<b class="fc">&nbsp;        session.setAttribute(&quot;randomList&quot;, randomList);</b>
+&nbsp;
+&nbsp;        // Construct a new ApiEpisodeLoader
+<b class="fc">&nbsp;        ApiEpisodeLoader episodeRetriever = new ApiEpisodeLoader();</b>
+&nbsp;        // Construct an EpisodeFullResponse to contain search results by episode ID
+<b class="fc">&nbsp;        EpisodeFullResponse selection = episodeRetriever.getEpisodeData(episodeId);</b>
+&nbsp;        // Add the EpisodeFullResponse to the session attributes
+<b class="fc">&nbsp;        session.setAttribute(&quot;selection&quot;, selection);</b>
+&nbsp;
+&nbsp;        // Search the episode database for the selected episode UID
+<b class="fc">&nbsp;        ArrayList&lt;Episode&gt; episodesByStapiId = (ArrayList&lt;Episode&gt;) episodeDao.getByPropertyEqual(&quot;stapiEpisodeId&quot;, episodeId);</b>
+&nbsp;        // Expectation is for single episode; get from first array index
+<b class="fc">&nbsp;        stapiEpisode = episodesByStapiId.get(0);</b>
+&nbsp;        // Add the Episode object to the session attributes
+<b class="fc">&nbsp;        session.setAttribute(&quot;episodeObject&quot;, stapiEpisode);</b>
+&nbsp;
+&nbsp;        // If the currentUser is not null, get the User and check for existing Views
+<b class="fc">&nbsp;        if (session.getAttribute(&quot;currentUser&quot;) != null) {</b>
+<b class="nc">&nbsp;            currentUser = (User) session.getAttribute(&quot;currentUser&quot;);</b>
+<b class="nc">&nbsp;            extractExistingViewsIfTheyExist();</b>
+&nbsp;        }
+&nbsp;        // Set the existing watchState based on whether a View for this user and episode exists
+<b class="fc">&nbsp;        if (currentView == null) {</b>
+&nbsp;            // No view exists, watchState 0
+<b class="fc">&nbsp;            session.setAttribute(&quot;watchState&quot;, 0);</b>
+<b class="nc">&nbsp;        } else if (currentView.getStatusId() == 1) {</b>
+&nbsp;            // View exists, in progress state, watchState 1
+<b class="nc">&nbsp;            session.setAttribute(&quot;watchState&quot;, 1);</b>
+&nbsp;        } else {
+&nbsp;            // View exists, finished state, watchState 2
+<b class="nc">&nbsp;            session.setAttribute(&quot;watchState&quot;, 2);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Set destination URL based on conditional statements
+<b class="fc">&nbsp;        String url = &quot;&quot;;</b>
+<b class="fc">&nbsp;        if (randomList.size() == 1) {</b>
+&nbsp;            // If randomList is nearly empty, regenerate it
+<b class="nc">&nbsp;            url = &quot;/snapshot&quot;;</b>
+<b class="fc">&nbsp;        } else if (session.getAttribute(&quot;currentUser&quot;) == null || session.getAttribute(&quot;currentUser&quot;).equals(&quot;&quot;)) {</b>
+&nbsp;            // If the currentUser is null or blank, go to public
+<b class="fc">&nbsp;            url = &quot;/public.jsp&quot;;</b>
+&nbsp;        } else {
+&nbsp;            // If the currentUser is populated, go to member
+<b class="nc">&nbsp;            url = &quot;/member.jsp&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Complete page forward
+<b class="fc">&nbsp;        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);</b>
+<b class="fc">&nbsp;        dispatcher.forward(request, response);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public View checkForViews(Set&lt;View&gt; viewPool, int episodeId) {
+&nbsp;        // Create new View to contain search result
+<b class="nc">&nbsp;        View foundView = null;</b>
+&nbsp;        // For each entry in viewPool, compare DB episode ID and set to foundView if match found
+<b class="nc">&nbsp;        for (View oldView : viewPool) {</b>
+<b class="nc">&nbsp;            if (oldView.getEpisodeId() == episodeId) {</b>
+<b class="nc">&nbsp;                foundView = oldView;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;        // Return View, set if found or null if not
+<b class="nc">&nbsp;        return foundView;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void extractExistingViewsIfTheyExist() {
+&nbsp;        // If currentUser has any views, check them for current episode
+<b class="nc">&nbsp;        if (!currentUser.getViewsById().isEmpty()) {</b>
+&nbsp;            // Get currentUser&#39;s associated views
+<b class="nc">&nbsp;            Set&lt;View&gt; userViews = currentUser.getViewsById();</b>
+&nbsp;            // Pass view set to be checked for matches
+<b class="nc">&nbsp;            currentView = checkForViews(userViews, stapiEpisode.getId());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-09 16:01</div>
+</div>
+</body>
+</html>

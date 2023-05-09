@@ -1,3 +1,5 @@
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!-- https://stackoverflow.com/questions/8381151/can-you-use-jstl-cif-to-test-against-a-url-pattern -->
 <div class="button-col">
     <c:choose>

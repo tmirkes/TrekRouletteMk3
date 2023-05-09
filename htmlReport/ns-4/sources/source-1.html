@@ -1,0 +1,185 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BuildUserOwnList</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">persistence</a>
+</div>
+
+<h1>Coverage Summary for Class: BuildUserOwnList (persistence)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BuildUserOwnList</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (4/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    41.7%
+  </span>
+  <span class="absValue">
+    (20/48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package persistence;
+&nbsp;
+&nbsp;import entity.*;
+&nbsp;import org.apache.logging.log4j.LogManager;
+&nbsp;import org.apache.logging.log4j.Logger;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.concurrent.ThreadLocalRandom;
+&nbsp;
+<b class="fc">&nbsp;public class BuildUserOwnList {</b>
+<b class="fc">&nbsp;    private final Logger logger = LogManager.getLogger(this.getClass());</b>
+<b class="fc">&nbsp;    private final TrekDao&lt;Episode&gt; episodeDao = new TrekDao&lt;&gt;(Episode.class);</b>
+<b class="fc">&nbsp;    private final TrekDao&lt;Season&gt; seasonDao = new TrekDao&lt;&gt;(Season.class);</b>
+<b class="fc">&nbsp;    private final TrekDao&lt;View&gt; viewDao = new TrekDao&lt;&gt;(View.class);</b>
+&nbsp;
+&nbsp;    public ArrayList&lt;Episode&gt; getCompleteEpisodeList() {
+<b class="fc">&nbsp;        return (ArrayList&lt;Episode&gt;) episodeDao.getAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Season&gt; getOwnedSeasons(User currentUser) {
+<b class="nc">&nbsp;        ArrayList&lt;Season&gt; seasonList = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        Set&lt;Own&gt; ownedSeasons = currentUser.getOwnsById();</b>
+<b class="nc">&nbsp;        logger.info(&quot;Owned seasons: &quot; + ownedSeasons.size());</b>
+<b class="nc">&nbsp;        for (Own owned : ownedSeasons) {</b>
+<b class="nc">&nbsp;            seasonList.add(seasonDao.getById(owned.getSeasonId()));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        logger.info(&quot;Seasons: &quot; + seasonList);</b>
+<b class="nc">&nbsp;        return seasonList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Episode&gt; getCollectionBasedEpisodes(ArrayList&lt;Season&gt; seasonList) {
+<b class="nc">&nbsp;        ArrayList&lt;Episode&gt; collectionSpecificEpisodeList = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        for (Season season : seasonList) {</b>
+<b class="nc">&nbsp;            collectionSpecificEpisodeList.addAll(episodeDao.getByPropertyEqual(&quot;seasonId&quot;, String.valueOf(season.getId())));</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        logger.info(&quot;Episodes: &quot; + collectionSpecificEpisodeList);</b>
+<b class="nc">&nbsp;        return collectionSpecificEpisodeList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Episode&gt; getEpisodeIdsOfViewedEpisodes(User currentUser) {
+<b class="nc">&nbsp;        ArrayList&lt;Episode&gt; viewedList = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        ArrayList&lt;View&gt; userViews = (ArrayList&lt;View&gt;) viewDao.getByPropertyEqual(&quot;userId&quot;, Integer.toString(currentUser.getId()));</b>
+<b class="nc">&nbsp;        for (View view : userViews) {</b>
+<b class="nc">&nbsp;            if (view.getStatusId() != 3) {</b>
+<b class="nc">&nbsp;                Episode episode = episodeDao.getById(view.getEpisodeId());</b>
+<b class="nc">&nbsp;                viewedList.add(episode);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        logger.info(&quot;Finished: &quot; + viewedList);</b>
+<b class="nc">&nbsp;        return viewedList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Episode&gt; pareOutWatchedEpisodes(ArrayList&lt;Episode&gt; collection, ArrayList&lt;Episode&gt; viewed) {
+<b class="nc">&nbsp;        logger.info(&quot;collection before: &quot; + collection.size());</b>
+<b class="nc">&nbsp;        collection.removeAll(viewed);</b>
+<b class="nc">&nbsp;        logger.info(&quot;viewed eps: &quot; + viewed.size());</b>
+<b class="nc">&nbsp;        logger.info(&quot;collection after: &quot; + collection.size());</b>
+<b class="nc">&nbsp;        return collection;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Integer&gt; buildRandomSequence(int maxNumber, int maxCount) {
+<b class="fc">&nbsp;        ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        int count = 0;</b>
+<b class="fc">&nbsp;        while (count &lt; maxCount) {</b>
+<b class="fc">&nbsp;            int number = ThreadLocalRandom.current().nextInt(0, maxNumber);</b>
+<b class="fc">&nbsp;            logger.info(&quot;number &quot; + count + &quot;: &quot; + number);</b>
+<b class="fc">&nbsp;            if (checkForUniqueness(list, number)) {</b>
+<b class="fc">&nbsp;                list.add(number);</b>
+<b class="fc">&nbsp;                count++;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return list;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkForUniqueness(ArrayList&lt;Integer&gt; theList, int currentValue) {
+<b class="fc">&nbsp;        boolean addValue = false;</b>
+<b class="fc">&nbsp;        if (!theList.contains(currentValue)) {</b>
+<b class="fc">&nbsp;            addValue = true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return addValue;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-09 16:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > View</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">entity</a>
+</div>
+
+<h1>Coverage Summary for Class: View (entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">View</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.5%
+  </span>
+  <span class="absValue">
+    (2/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.1%
+  </span>
+  <span class="absValue">
+    (2/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">View$HibernateProxy$yPDEv9MQ</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    9.5%
+  </span>
+  <span class="absValue">
+    (2/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.1%
+  </span>
+  <span class="absValue">
+    (2/28)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package entity;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;import java.sql.Timestamp;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@Entity(name=&quot;View&quot;)
+&nbsp;@Table(name=&quot;view&quot;)
+&nbsp;public class View {
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    @Id
+&nbsp;    @Column(name = &quot;id&quot;, nullable = false)
+&nbsp;    private int id;
+&nbsp;    @Basic
+&nbsp;    @Column(name = &quot;view_date&quot;, nullable = false)
+&nbsp;    private Timestamp viewDate;
+&nbsp;    @Basic
+&nbsp;    @Column(name = &quot;user_id&quot;, nullable = false, insertable = false, updatable = false)
+&nbsp;    private int userId;
+&nbsp;    @Basic
+&nbsp;    @Column(name = &quot;episode_id&quot;, nullable = false, insertable = false, updatable = false)
+&nbsp;    private int episodeId;
+&nbsp;    @Basic
+&nbsp;    @Column(name = &quot;status_id&quot;, nullable = false, insertable = false, updatable = false)
+&nbsp;    private int statusId;
+&nbsp;    @ManyToOne
+&nbsp;    @JoinColumn(name = &quot;user_id&quot;, referencedColumnName = &quot;id&quot;, nullable = false)
+&nbsp;    private User userByUserId;
+&nbsp;    @ManyToOne
+&nbsp;    @JoinColumn(name = &quot;episode_id&quot;, referencedColumnName = &quot;id&quot;, nullable = false)
+&nbsp;    private Episode episodeByEpisodeId;
+&nbsp;    @ManyToOne
+&nbsp;    @JoinColumn(name = &quot;status_id&quot;, referencedColumnName = &quot;id&quot;, nullable = false)
+&nbsp;    private Status statusByStatusId;
+&nbsp;
+<b class="fc">&nbsp;    public View() {</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public View(Timestamp viewDate, int userId, int episodeId, int statusId) {</b>
+<b class="nc">&nbsp;        this.viewDate = viewDate;</b>
+<b class="nc">&nbsp;        this.userId = userId;</b>
+<b class="nc">&nbsp;        this.episodeId = episodeId;</b>
+<b class="nc">&nbsp;        this.statusId = statusId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getId() {
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(int id) {
+<b class="nc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Timestamp getViewDate() {
+<b class="nc">&nbsp;        return viewDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setViewDate(Timestamp viewDate) {
+<b class="nc">&nbsp;        this.viewDate = viewDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getUserId() {
+<b class="nc">&nbsp;        return userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserId(int userId) {
+<b class="nc">&nbsp;        this.userId = userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getEpisodeId() {
+<b class="nc">&nbsp;        return episodeId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEpisodeId(int episodeId) {
+<b class="nc">&nbsp;        this.episodeId = episodeId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getStatusId() {
+<b class="nc">&nbsp;        return statusId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setStatusId(int statusId) {
+<b class="nc">&nbsp;        this.statusId = statusId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="nc">&nbsp;        View view = (View) o;</b>
+<b class="nc">&nbsp;        return id == view.id &amp;&amp; userId == view.userId &amp;&amp; episodeId == view.episodeId &amp;&amp; statusId == view.statusId &amp;&amp; Objects.equals(viewDate, view.viewDate);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="fc">&nbsp;        return Objects.hash(id, viewDate, userId, episodeId, statusId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;View{&quot; +</b>
+&nbsp;                &quot;id=&quot; + id +
+&nbsp;                &quot;, viewDate=&quot; + viewDate +
+&nbsp;                &quot;, userId=&quot; + userId +
+&nbsp;                &quot;, episodeId=&quot; + episodeId +
+&nbsp;                &quot;, statusId=&quot; + statusId +
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;
+&nbsp;    public User getUserByUserId() {
+<b class="nc">&nbsp;        return userByUserId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserByUserId(User userByUserId) {
+<b class="nc">&nbsp;        this.userByUserId = userByUserId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Episode getEpisodeByEpisodeId() {
+<b class="nc">&nbsp;        return episodeByEpisodeId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEpisodeByEpisodeId(Episode episodeByEpisodeId) {
+<b class="nc">&nbsp;        this.episodeByEpisodeId = episodeByEpisodeId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Status getStatusByStatusId() {
+<b class="nc">&nbsp;        return statusByStatusId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setStatusByStatusId(Status statusByStatusId) {
+<b class="nc">&nbsp;        this.statusByStatusId = statusByStatusId;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-09 16:01</div>
+</div>
+</body>
+</html>
