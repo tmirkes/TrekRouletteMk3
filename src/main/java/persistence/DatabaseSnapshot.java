@@ -14,32 +14,46 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * DatabaseSnapshot is responsible for generating ArrayLists representing current values of the database at the time
+ * the class is called.
+ *
+ * @author tlmirkes
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {"/snapshot"})
 public class DatabaseSnapshot extends HttpServlet {
     private final int QUEUE_SIZE = 25;
     protected int maxCount = 0;
     private int listLength = 0;
     private final Logger logger = LogManager.getLogger(this.getClass());
-    private final TrekDao<Episode> episodeDao = new TrekDao<>(Episode.class);
-    private final TrekDao<Season> seasonDao = new TrekDao<>(Season.class);
-    private final TrekDao<View> viewDao = new TrekDao<>(View.class);
     private BuildUserOwnList builder = new BuildUserOwnList();
 
+    /**
+     * Handles HTTP GET requests.
+     *
+     * @param request the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @exception ServletException if there is a Servlet failure
+     * @exception IOException if there is an IO failure
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ArrayList<Season> seasonList = new ArrayList<>();
+        ArrayList<Season> seasonList;
         ArrayList<Episode> collectionSpecificEpisodeList = new ArrayList<>();
         ArrayList<Episode> completeEpisodeList;
         ArrayList<Integer> randomList;
         ArrayList<Episode> viewedList;
 
+        // Get Session object
         HttpSession session = request.getSession();
-
+        // Load current User object from session attributes
         User currentUser = (User) session.getAttribute("currentUser");
 
+        // Get the complete owned Season list
         completeEpisodeList = builder.getCompleteEpisodeList();
-        logger.info("All episodes: " + completeEpisodeList.size());
 
+        // Filter the episode list and determine the proper queue list length
         if (currentUser != null) {
             seasonList = builder.getOwnedSeasons(currentUser);
             collectionSpecificEpisodeList = builder.getCollectionBasedEpisodes(seasonList);
@@ -56,23 +70,21 @@ public class DatabaseSnapshot extends HttpServlet {
         } else {
             listLength = completeEpisodeList.size();
             maxCount = QUEUE_SIZE;
-            logger.info("Expected list length: " + listLength);
         }
 
+        // Generate a list of random numbers
         randomList = builder.buildRandomSequence(listLength, maxCount);
 
+        // Determine if complete episode list or user-specific list is to be used
         if (currentUser != null) {
             session.setAttribute("episodeList", collectionSpecificEpisodeList);
-            logger.info("SPECIFIC LIST USED.");
         } else {
             session.setAttribute("episodeList", completeEpisodeList);
-            logger.info("COMPLETE LIST USED.");
         }
         session.setAttribute("randomList", randomList);
 
         String url = "/getEpisode";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);
-
     }
 }

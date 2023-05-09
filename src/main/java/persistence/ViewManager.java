@@ -1,9 +1,6 @@
 package persistence;
 
 import entity.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +13,12 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 
-
+/**
+ * ViewManager handles operations that involve adding and updating View entities and their persistence state
+ *
+ * @author tlmirkes
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {"/manageViews"})
 public class ViewManager extends HttpServlet {
     private User user;
@@ -26,34 +28,33 @@ public class ViewManager extends HttpServlet {
     private final TrekDao<View> viewDao = new TrekDao(View.class);
     private final TrekDao<Episode> episodeDao = new TrekDao(Episode.class);
     private final TrekDao<Status> statusDao = new TrekDao(Status.class);
-    private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Handles HTTP POST requests.
+     *
+     * @param request the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @exception ServletException if there is a Servlet failure
+     * @exception IOException if there is an IO failure
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get session
         HttpSession session = request.getSession();
         // Searchable episode ID extraction
-        logger.info("form ep id: " + request.getParameter("episodeId"));
-        logger.info("form user id: " + request.getParameter("userId"));
-        logger.info("form view type: " + request.getParameter("viewType"));
         String episodeId = request.getParameter("episodeId");
         int episodeIdInt = Integer.parseInt(episodeId);
         // Load user from session attributes
         user = (User) session.getAttribute("currentUser");
-        logger.info(user);
         // Search episode table for episodes matching episodId form field
         ArrayList<Episode> episodeSearch = (ArrayList<Episode>) episodeDao.getByPropertyEqual("id", episodeId);
-        logger.info("ep id: " + episodeIdInt);
-        logger.info(episodeSearch);
         // Load episode from proper source
         if (episodeSearch.isEmpty()) {
             // If episodeSearch is empty, get the actual episode
             episode = episodeDao.getById(episodeIdInt);
-            logger.info("db ep: " + episode);
         } else {
             // If episodeSearch has results, get the first
             episode = episodeSearch.get(0);
-            logger.info("list ep: " + episode);
         }
         // If form field viewType is set to start, add a new one
         if (((String) request.getParameter("viewType")).compareTo("start") == 0) {
@@ -97,6 +98,9 @@ public class ViewManager extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Modify entity relationships prior to persisting the View entity
+     */
     public void constructViewForPersistence() {
         // Add status object to view
         view.setStatusByStatusId(status);

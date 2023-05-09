@@ -6,7 +6,6 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-
 /**
  * This file provides a SessionFactory for use with DAOs using Hibernate
  *
@@ -14,21 +13,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  * @version 2.0 1/27/18.
  */
 public class SessionFactoryProvider {
-
     private static SessionFactory sessionFactory;
 
     /**
      * private constructor prevents instantiating this class anywhere else
      */
+    private SessionFactoryProvider() {}
 
-    private SessionFactoryProvider() {
-
-    }
     /**
      * Create session factory.
      */
     public static void createSessionFactory() {
-
         StandardServiceRegistry standardRegistry =
                 new StandardServiceRegistryBuilder().configure().build();
         Metadata metaData =
@@ -46,6 +41,5 @@ public class SessionFactoryProvider {
             createSessionFactory();
         }
         return sessionFactory;
-
     }
 }

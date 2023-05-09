@@ -1,30 +1,37 @@
 package persistence;
 
 import entity.User;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Process AWS authentication token data to determine the existence of user credentials in the database, and persist
+ * them if the user is new or retrieve them if user already exists.
+ *
+ * @author tlmirkes
+ * @version 1.0
+ */
 public class FetchUser {
     private final TrekDao<User> userDao = new TrekDao<>(User.class);
-    private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Extract token data and search the database for matches
+     *
+     * @param tokenData HashMap of AWS token claims
+     * @return retrieved or constructed User entity
+     */
     public User searchForUserMatch(HashMap<String, String> tokenData) {
         String userName = tokenData.get("username");
         String firstName = tokenData.get("firstname");
         String lastName = tokenData.get("lastname");
         List<User> getUsers = userDao.getByPropertyEqual("userName", userName);
-        logger.info("users: " + getUsers.toString());
         User currentUser;
         if (getUsers.isEmpty()) {
-            logger.info("No results found, creating new user.");
             currentUser = new User(userName, firstName, lastName, Timestamp.from(Instant.now()));
             int newId = userDao.addEntity(currentUser);
         } else {
-            logger.info("User found: " + getUsers.get(0).getUserName());
             currentUser = (User)getUsers.get(0);
             currentUser.setLastLogin(Timestamp.from(Instant.now()));
             userDao.editEntity(currentUser);
