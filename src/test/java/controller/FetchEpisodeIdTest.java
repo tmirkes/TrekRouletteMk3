@@ -4,10 +4,7 @@ import entity.Episode;
 import persistence.TrekDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.testng.AssertJUnit.assertTrue;
@@ -26,11 +23,11 @@ class FetchEpisodeIdTest {
     void testSelectRandomEpisodeId() {
         // Setup
         ArrayList<Episode> episodes = new ArrayList<>();
-        for(int i = 0; i < 4; i++) {
+        for(int i = 1; i < 5; i++) {
             episodes.add(episodeDao.getById(i));
         }
         ArrayList<Integer> integers = new ArrayList<>();
-        for(int i = 0; i < 4; i++) {
+        for(int i = 1; i < 5; i++) {
             integers.add(i);
         }
 

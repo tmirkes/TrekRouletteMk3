@@ -1,30 +1,39 @@
 <!-- https://stackoverflow.com/questions/8381151/can-you-use-jstl-cif-to-test-against-a-url-pattern -->
-<c:choose>
-    <c:when test="${currentUser == null}">
-        <a href="public.jsp"><button>Home</button></a>
-    </c:when>
-    <c:when test="${fn:contains(pageContext.request.requestURI, '/manageOwn') || fn:contains(pageContext.request.requestURI, '/collection')}">
-        <a href="snapshot"><button>Home</button></a>
-    </c:when>
-    <c:otherwise>
-        <a href="member.jsp"><button>Home</button></a>
-    </c:otherwise>
-</c:choose>
-<a href="about.jsp"><button>About</button></a>
-<c:if test="${fn:contains(pageContext.request.requestURI, '/public') || fn:contains(pageContext.request.requestURI, '/member')}">
-    <a href="getEpisode"><button>New Recommendation</button></a>
-</c:if>
-<c:if test="${currentUser != null}">
-    <a href="manageOwn"><button>Collection</button></a>
-</c:if>
-<c:if test="${currentUser != null && currentUser.userName == 'admin'}">
-    <a href="update.jsp"><button>Check for Updates</button></a>
-</c:if>
-<c:choose>
-    <c:when test="${currentUser == null}">
-        <a href = "logIn"><button>Log In</button></a>
-    </c:when>
-    <c:otherwise>
-        <a href = "logOut"><button>Log Out</button></a>
-    </c:otherwise>
-</c:choose>
+<div class="button-col">
+    <c:choose>
+        <c:when test="${currentUser == null}">
+            <div class="button" id="top-left"><a href="public.jsp">Home</a></div>
+        </c:when>
+        <c:when test="${fn:contains(pageContext.request.requestURI, '/manageOwn') || fn:contains(pageContext.request.requestURI, '/collection')}">
+            <div class="button" id="top-left"><a href="snapshot">Home</a></div>
+        </c:when>
+        <c:otherwise>
+            <div class="button" id="top-left"><a href="member.jsp">Home</a></div>
+        </c:otherwise>
+    </c:choose>
+    <div class="button" id="mid-left"><a href="about.jsp">About</a></div>
+    <c:if test="${currentUser != null && currentUser.userName == 'admin'}">
+        <div class="button" id="bottom-left"><a href="update.jsp">Updates</a></div>
+    </c:if>
+</div>
+<div class="button-col">
+    <c:if test="${fn:contains(pageContext.request.requestURI, '/public') || fn:contains(pageContext.request.requestURI, '/member')}">
+        <div class="button" id="top-right"><a href="getEpisode">Suggest</a></div>
+    </c:if>
+    <c:choose>
+        <c:when test="${currentUser != null}">
+            <div class="button" id="mid-right"><a href="manageOwn">Collection</a></div>
+        </c:when>
+        <c:otherwise>
+            <div class="button" id="mid-right"><a href=""></a></div>
+        </c:otherwise>
+    </c:choose>
+    <c:choose>
+        <c:when test="${currentUser == null}">
+            <div class="button" id="bottom-right"><a href="logIn">Log In</a></div>
+        </c:when>
+        <c:otherwise>
+            <div class="button" id="bottom-right"><a href="logOut">Log Out</a></div>
+        </c:otherwise>
+    </c:choose>
+</div>
