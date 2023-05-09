@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<%@ include file="head.jsp"%>
+<c:import url="head.jsp"></c:import>
 <body>
 <div class="wrap">
     <div class="scroll-top">
@@ -107,7 +107,7 @@
 
             <!-- End content area. -->
 
-            <%@ include file="footer.jsp"%>
+            <c:import url="footer.jsp"></c:import>
         </div>
     </div>
 </div>
