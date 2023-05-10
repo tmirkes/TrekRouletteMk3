@@ -98,7 +98,7 @@
                     <p><strong>Live long and prosper!</strong></p>
                 </div>
                 <div style="justify-content: center; align-content: center; float: left; width: 50%;">
-                    <div class="button content-action" style="margin: auto;"><a href="${pageContext.request.contextPath}/snapshot">Take a spin</a></div>
+                    <div style="margin: auto;"><button><a href="${pageContext.request.contextPath}/snapshot">Take a spin</a></button></div>
                 </div>
             </div>
             <c:if test="${currentUser != null}">

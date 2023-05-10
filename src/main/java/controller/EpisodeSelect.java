@@ -16,6 +16,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * EpisodeSelect controls the classes related to constructing an episode ID pool, random number pool, and applying the
+ * processing logic to select a random episode and return it for display in the JSP
+ *
+ * @author tlmirkes
+ * @version 1.0
+ */
 @WebServlet(name = "EpisodeSelect", urlPatterns = "/getEpisode")
 public class EpisodeSelect extends HttpServlet {
     View currentView = null;
@@ -27,6 +34,14 @@ public class EpisodeSelect extends HttpServlet {
     private String episodeId = "";
     private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Handles HTTP GET requests.
+     *
+     * @param request the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @exception ServletException if there is a Servlet failure
+     * @exception IOException if there is an IO failure
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get session
@@ -90,6 +105,13 @@ public class EpisodeSelect extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    /**
+     * Identify whether the current user has an existing view for the episode
+     *
+     * @param viewPool set of View entities for the current user
+     * @param episodeId episode id being checked
+     * @return View entity
+     */
     public View checkForViews(Set<View> viewPool, int episodeId) {
         // Create new View to contain search result
         View foundView = null;
@@ -103,6 +125,9 @@ public class EpisodeSelect extends HttpServlet {
         return foundView;
     }
 
+    /**
+     * Check for existing View entries in the database, and extract them if they exist
+     */
     public void extractExistingViewsIfTheyExist() {
         // If currentUser has any views, check them for current episode
         if (!currentUser.getViewsById().isEmpty()) {

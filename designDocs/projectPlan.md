@@ -49,50 +49,38 @@
 - [x] Establish authentication settings
 - [x] Implement STAPI access into project
 - [x] Develop connection and response tests
-- [ ] Pass all tests on API calls
-- [ ] Implement STAPI mapping to local objects
-- [ ] Develop data verification tests
-- [ ] Pass all tests on data mapping
+- [x] Implement STAPI mapping to local objects
 - [x] Weekly reflection
 
-### Week 9
-- [ ] Verify STAPI update and test response data
-- [ ] Pass all tests on API calls
-- [ ] Revise POJOs to align with STAPI response objects
-- [ ] Implement STAPI mapping to local objects
-- [ ] Develop data verification tests
-- [ ] Pass all tests on data mapping
-- [ ] Implement passage of POJOs to JSP front end
-- [ ] Weekly reflection
-
-### Week 10
-- [ ] Distribute link to site for external testing
-- [ ] Solicit feedback on site functionality
-- [ ] Document user testing and feedback in project documentation
-- [ ] Weekly reflection
-
-### Week 11
-- [ ] x
-- [ ] Weekly reflection
-
-### Week 12
-- [ ] x
-- [ ] Weekly reflection
+### Week 9 - 12
+Group work on web service
 
 ### Week 13
-- [ ] x
-- [ ] Weekly reflection
+- [x] Attempt to figure out where I left off
+- [x] Begin project version 3
+- [x] Migrate usable assets from old projects
+- [x] Begin restructuring of new classes
+- [x] Get basic data flow and processes implemented
+- [x] Weekly reflection
 
 ### Week 14
-- [ ] x
-- [ ] Weekly reflection
+- [x] Flesh out basic structures of episode selection, loading, and API calls
+- [x] Implement database calls for View, Own, and Season/Episode updates
+- [x] Professional Development project (video recording)
+- [x] Weekly reflection
 
 ### Week 15
-- [ ] Final Presentation
-- [ ] Create video, add video link to readme.md
-- [ ] Finalize all documentation
-- [ ] Code quality check
+- [x] Verify STAPI update and test response data
+- [x] Pass all tests on API calls
+- [x] Revise POJOs to align with STAPI response objects
+- [x] Implement STAPI mapping to local objects
+- [x] Pass all tests on data mapping
+- [x] Implement passage of POJOs to JSP front end
+- [x] Weekly reflection
 
 ### Week 16
-- [ ] Weekly journal entry
-- [ ] Final touches before code complete
+- [x] Revise and construct tests
+- [x] Convert logged testing messages to testing classes
+- [x] Final Presentation
+- [x] Create video, add video link to readme.md
+- [x] Finalize all documentation

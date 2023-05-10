@@ -9,13 +9,10 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
 /**
- * <code>ApplicationStartup</code> class for Advanced Java Programming 112 Project 4.
- *
- * On startup, load a <code>Properties</code> file, assign to instance
- * variable, and add variable as <code>Attribute</code> to
- * <code>ServletContext</code> for later use.
+ * Startup loads a <code>Properties</code> file at servlet startup
  *
  * @author tlmirkes
+ * @version 1.0
  */
 @WebServlet(
         name="Startup",
@@ -35,10 +32,8 @@ public class Startup extends HttpServlet implements PropertiesLoader {
     public void init() {
         dbProperties = initializeProperties("/database.properties");
         getServletContext().setAttribute("dbSettings", dbProperties);
-        logger.info("dbSettings: " + getServletContext().getAttribute("dbSettings"));
         cognitoproperties = initializeProperties("/cognito.properties");
         getServletContext().setAttribute("cognitoProperties", cognitoproperties);
-        logger.info("cognitoProperties: " + getServletContext().getAttribute("cognitoProperties"));
     }
 
     /**

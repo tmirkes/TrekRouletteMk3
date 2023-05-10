@@ -15,13 +15,25 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 
-@WebServlet(
-        urlPatterns = {"/loadUser"}
-)
+/**
+ * UserLoader queries the database and loads User data for authenticated users into the HTTP session
+ *
+ * @author tlmirkes
+ * @version 1.0
+ */
+@WebServlet( urlPatterns = {"/loadUser"} )
 public class UserLoader extends HttpServlet {
     private FetchUser seeker = new FetchUser();
     private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Handles HTTP GET requests.
+     *
+     * @param req the HttpServletRequest object
+     * @param resp the HttpServletResponse object
+     * @exception ServletException if there is a Servlet failure
+     * @exception IOException if there is an IO failure
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();

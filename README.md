@@ -10,6 +10,10 @@ Star Trek debuted in 1966, and has continued to release new TV episodes across m
 While it is possible to pick "random" episodes from the series one has access to through various streaming services and physical media, it can be overwhelming to make that choice consciously.  Perhaps time is limited, so wasting precious minutes choosing an episode can be the difference between fitting in an episode and needing to do something else.  Perhaps work stress leaves one with a fried brain and little desire to make any decisions, making the prospect of choosing from among dozens or hundreds of episodes a daunting proposition.
 
 Trek Roulette intends to make that random selection process less stressful, requiring minimal human input to select an episode and indicate what media will be used to view the show.
+
+### Final Presentation Video
+
+[Trek Roulette (19 minutes)](https://youtu.be/H7UxcKmLklw)
 ### Project Technologies/Techniques
 
 * **Security/Authentication**
@@ -47,6 +51,7 @@ Trek Roulette intends to make that random selection process less stressful, requ
 ### Design Documents
 
 [User Stories](designDocs/userStories.md)
+(Note: final MVP matches indicated stories)
 
 
 [Project Plan](designDocs/projectPlan.md)

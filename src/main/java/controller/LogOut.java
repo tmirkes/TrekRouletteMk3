@@ -12,6 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Manages Amazon Web Service log out endpoint calls
+ *
+ * @author tlmirkes
+ * @version 1.0
+ */
 @WebServlet(
         urlPatterns = {"/logOut"}
 )
@@ -36,8 +42,6 @@ public class LogOut extends HttpServlet implements PropertiesLoader {
      * Read in the cognito props file and get the client id and required urls
      * for authenticating a user.
      */
-    // TODO This code appears in a couple classes, consider using a startup servlet similar to adv java project
-    // 4 to do this work a single time and put the properties in the application scope
     private void loadProperties() {
         try {
             properties = loadProperties("/cognito.properties");
@@ -60,7 +64,6 @@ public class LogOut extends HttpServlet implements PropertiesLoader {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // TODO if properties weren't loaded properly, route to an error page
         String url = LOGOUT_ENDPOINT + "?client_id=" + CLIENT_ID + "&logout_uri=" + logOutRedirect;
         resp.sendRedirect(url);
     }

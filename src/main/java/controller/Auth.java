@@ -38,11 +38,13 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+/**
+ * Manages Amazon Web Service authorization tokens and credentials management for log in endpoint calls
+ */
 
 @WebServlet(
         urlPatterns = {"/auth"}
 )
-// TODO if something goes wrong it this process, route to an error page. Currently, errors are only caught and logged.
 /**
  * Inspired by: https://stackoverflow.com/questions/52144721/how-to-get-access-token-using-client-credentials-using-java-code
  */
@@ -116,17 +118,9 @@ public class Auth extends HttpServlet implements PropertiesLoader {
     private TokenResponse getToken(HttpRequest authRequest) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<?> response = null;
-
         response = client.send(authRequest, HttpResponse.BodyHandlers.ofString());
-
-
-        logger.debug("Response headers: " + response.headers().toString());
-        logger.debug("Response body: " + response.body().toString());
-
         ObjectMapper mapper = new ObjectMapper();
         TokenResponse tokenResponse = mapper.readValue(response.body().toString(), TokenResponse.class);
-        logger.debug("Id token: " + tokenResponse.getIdToken());
-
         return tokenResponse;
 
     }
@@ -146,12 +140,10 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         String keyId = tokenHeader.getKid();
         String alg = tokenHeader.getAlg();
 
-        // todo pick proper key from the two - it just so happens that the first one works for my case
         // Use Key's N and E
         BigInteger modulus = new BigInteger(1, org.apache.commons.codec.binary.Base64.decodeBase64(jwks.getKeys().get(0).getN()));
         BigInteger exponent = new BigInteger(1, org.apache.commons.codec.binary.Base64.decodeBase64(jwks.getKeys().get(0).getE()));
 
-        // TODO the following is "happy path", what if the exceptions are caught?
         // Create a public key
         PublicKey publicKey = null;
         try {
@@ -178,12 +170,6 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         String userName = jwt.getClaim("cognito:username").asString();
         String firstName = jwt.getClaim("given_name").asString();
         String lastName = jwt.getClaim("family_name").asString();
-        logger.debug("here's the username: " + userName);
-        logger.debug("here's the firstname: " + firstName);
-        logger.debug("here's the lastname: " + lastName);
-
-        logger.debug("here are all the available claims: " + jwt.getClaims());
-
         HashMap<String, String> userInfo = new HashMap<>();
         userInfo.put("username", userName);
         userInfo.put("firstname", firstName);
@@ -237,7 +223,6 @@ public class Auth extends HttpServlet implements PropertiesLoader {
             File jwksFile = new File("jwks.json");
             FileUtils.copyURLToFile(jwksURL, jwksFile);
             jwks = mapper.readValue(jwksFile, Keys.class);
-            logger.debug("Keys are loaded. Here's e: " + jwks.getKeys().get(0).getE());
         } catch (IOException ioException) {
             logger.error("Cannot load json..." + ioException.getMessage(), ioException);
         } catch (Exception e) {
